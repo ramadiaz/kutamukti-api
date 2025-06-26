@@ -13,3 +13,13 @@ func MapComplaintInputToModel(input dto.Complaint) models.Complaints {
 	mapstructure.Decode(input, &output)
 	return output
 }
+
+func MapComplaintModelToOutput(input models.Complaints) dto.ComplaintResponse {
+	var output dto.ComplaintResponse
+
+	mapstructure.Decode(input, &output)
+	output.CreatedAt = input.CreatedAt
+	output.UpdatedAt = input.UpdatedAt
+
+	return output
+}

@@ -39,3 +39,17 @@ func (h *CompControllersImpl) Create(ctx *gin.Context) {
 		Message: "success",
 	})
 }
+
+func (h *CompControllersImpl) FindAll(ctx *gin.Context) {
+	output, err := h.services.FindAll(ctx)
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, dto.Response{
+		Status:  http.StatusOK,
+		Message: "success",
+		Body:    output,
+	})
+}

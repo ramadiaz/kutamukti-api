@@ -9,4 +9,5 @@ import (
 
 type CompServices interface {
 	Create(ctx *gin.Context, data dto.Complaint) *exceptions.Exception
+	FindAll(ctx *gin.Context) ([]dto.ComplaintResponse, *exceptions.Exception)
 }

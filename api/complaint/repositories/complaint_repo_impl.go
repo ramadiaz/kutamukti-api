@@ -23,3 +23,14 @@ func (r *CompRepositoriesImpl) Create(ctx *gin.Context, tx *gorm.DB, data models
 
 	return nil
 }
+
+func (r *CompRepositoriesImpl) FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.Complaints, *exceptions.Exception) {
+	var output []models.Complaints
+
+	result := tx.Find(&output)
+	if result.Error != nil {
+		return nil, exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return output, nil
+}

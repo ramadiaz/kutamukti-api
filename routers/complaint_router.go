@@ -10,5 +10,6 @@ func ComplaintRoutes(r *gin.RouterGroup, userController controllers.CompControll
 	complaintGroup := r.Group("/complaint")
 	{
 		complaintGroup.POST("/create", userController.Create)
+		complaintGroup.GET("/getall", userController.FindAll)
 	}
 }

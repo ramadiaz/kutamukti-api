@@ -65,3 +65,17 @@ Pesan: %s
 
 	return nil
 }
+
+func (s *CompServicesImpl) FindAll(ctx *gin.Context) ([]dto.ComplaintResponse, *exceptions.Exception) {
+	output, err := s.repo.FindAll(ctx, s.DB)
+	if err != nil {
+		return nil, err
+	}
+
+	var response []dto.ComplaintResponse
+	for _, v := range output {
+		response = append(response, mapper.MapComplaintModelToOutput(v))
+	}
+
+	return response, nil
+}

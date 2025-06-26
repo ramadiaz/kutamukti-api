@@ -10,4 +10,5 @@ import (
 
 type CompRepositories interface {
 	Create(ctx *gin.Context, tx *gorm.DB, data models.Complaints) *exceptions.Exception
+	FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.Complaints, *exceptions.Exception)
 }
