@@ -1,0 +1,12 @@
+services:
+  kutamukti-api:
+    container_name: kutamukti-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "kutamukti-api:1.0.4"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    ports:
+      - "${PORT}:${PORT}"
