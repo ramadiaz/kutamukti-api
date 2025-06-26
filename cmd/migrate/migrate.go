@@ -9,7 +9,6 @@ func main() {
 	db := config.InitDB()
 
 	err := db.AutoMigrate(
-		&models.Clients{},
 		&models.Users{},
 	)
 	if err != nil {

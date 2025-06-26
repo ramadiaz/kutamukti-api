@@ -12,7 +12,6 @@ require (
 	github.com/go-viper/mapstructure/v2 v2.2.1
 	github.com/google/wire v0.6.0
 	github.com/joho/godotenv v1.5.1
-	github.com/mssola/user_agent v0.6.0
 	golang.org/x/crypto v0.23.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gorm.io/driver/postgres v1.5.11
