@@ -1,15 +1,15 @@
 package main
 
 import (
-	"kutamukti-api/pkg/config"
 	"kutamukti-api/models"
+	"kutamukti-api/pkg/config"
 )
 
 func main() {
 	db := config.InitDB()
 
 	err := db.AutoMigrate(
-		&models.Users{},
+		&models.Complaints{},
 	)
 	if err != nil {
 		panic("failed to migrate models: " + err.Error())
