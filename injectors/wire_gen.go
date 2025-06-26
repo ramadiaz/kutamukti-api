@@ -10,6 +10,9 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/google/wire"
 	"gorm.io/gorm"
+	controllers2 "kutamukti-api/api/complaint/controllers"
+	repositories2 "kutamukti-api/api/complaint/repositories"
+	services2 "kutamukti-api/api/complaint/services"
 	"kutamukti-api/api/users/controllers"
 	"kutamukti-api/api/users/repositories"
 	"kutamukti-api/api/users/services"
@@ -24,6 +27,15 @@ func InitializeUserController(db *gorm.DB, validate *validator.Validate) control
 	return compControllers
 }
 
+func InitializeComplaintController(db *gorm.DB, validate *validator.Validate) controllers2.CompControllers {
+	compRepositories := repositories2.NewComponentRepository()
+	compServices := services2.NewComponentServices(compRepositories, db, validate)
+	compControllers := controllers2.NewCompController(compServices)
+	return compControllers
+}
+
 // injector.go:
 
 var userFeatureSet = wire.NewSet(repositories.NewComponentRepository, services.NewComponentServices, controllers.NewCompController)
+
+var complaintFeatureSet = wire.NewSet(repositories2.NewComponentRepository, services2.NewComponentServices, controllers2.NewCompController)
