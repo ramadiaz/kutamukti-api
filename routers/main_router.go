@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"net/http"
 	"kutamukti-api/injectors"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -19,7 +19,9 @@ func CompRouters(r *gin.RouterGroup, db *gorm.DB, validate *validator.Validate) 
 
 	userController := injectors.InitializeUserController(db, validate)
 	complaintController := injectors.InitializeComplaintController(db, validate)
+	scheduleController := injectors.InitializeScheduleController(db, validate)
 
 	UserRoutes(r, userController)
 	ComplaintRoutes(r, complaintController)
+	ScheduleRoutes(r, scheduleController)
 }

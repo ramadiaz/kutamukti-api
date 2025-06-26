@@ -13,6 +13,9 @@ import (
 	controllers2 "kutamukti-api/api/complaint/controllers"
 	repositories2 "kutamukti-api/api/complaint/repositories"
 	services2 "kutamukti-api/api/complaint/services"
+	controllers3 "kutamukti-api/api/schedule/controllers"
+	repositories3 "kutamukti-api/api/schedule/repositories"
+	services3 "kutamukti-api/api/schedule/services"
 	"kutamukti-api/api/users/controllers"
 	"kutamukti-api/api/users/repositories"
 	"kutamukti-api/api/users/services"
@@ -34,8 +37,17 @@ func InitializeComplaintController(db *gorm.DB, validate *validator.Validate) co
 	return compControllers
 }
 
+func InitializeScheduleController(db *gorm.DB, validate *validator.Validate) controllers3.CompControllers {
+	compRepositories := repositories3.NewComponentRepository()
+	compServices := services3.NewComponentServices(compRepositories, db, validate)
+	compControllers := controllers3.NewCompController(compServices)
+	return compControllers
+}
+
 // injector.go:
 
 var userFeatureSet = wire.NewSet(repositories.NewComponentRepository, services.NewComponentServices, controllers.NewCompController)
 
 var complaintFeatureSet = wire.NewSet(repositories2.NewComponentRepository, services2.NewComponentServices, controllers2.NewCompController)
+
+var scheduleFeatureSet = wire.NewSet(repositories3.NewComponentRepository, services3.NewComponentServices, controllers3.NewCompController)

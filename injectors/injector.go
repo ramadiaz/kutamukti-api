@@ -9,10 +9,14 @@ import (
 	userControllers "kutamukti-api/api/users/controllers"
 	userRepositories "kutamukti-api/api/users/repositories"
 	userServices "kutamukti-api/api/users/services"
-	
+
 	complaintControllers "kutamukti-api/api/complaint/controllers"
 	complaintRepositories "kutamukti-api/api/complaint/repositories"
 	complaintServices "kutamukti-api/api/complaint/services"
+
+	scheduleControllers "kutamukti-api/api/schedule/controllers"
+	scheduleRepositories "kutamukti-api/api/schedule/repositories"
+	scheduleServices "kutamukti-api/api/schedule/services"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/wire"
@@ -31,6 +35,12 @@ var complaintFeatureSet = wire.NewSet(
 	complaintControllers.NewCompController,
 )
 
+var scheduleFeatureSet = wire.NewSet(
+	scheduleRepositories.NewComponentRepository,
+	scheduleServices.NewComponentServices,
+	scheduleControllers.NewCompController,
+)
+
 func InitializeUserController(db *gorm.DB, validate *validator.Validate) userControllers.CompControllers {
 	wire.Build(userFeatureSet)
 	return nil
@@ -38,5 +48,10 @@ func InitializeUserController(db *gorm.DB, validate *validator.Validate) userCon
 
 func InitializeComplaintController(db *gorm.DB, validate *validator.Validate) complaintControllers.CompControllers {
 	wire.Build(complaintFeatureSet)
+	return nil
+}
+
+func InitializeScheduleController(db *gorm.DB, validate *validator.Validate) scheduleControllers.CompControllers {
+	wire.Build(scheduleFeatureSet)
 	return nil
 }

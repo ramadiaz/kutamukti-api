@@ -6,10 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ComplaintRoutes(r *gin.RouterGroup, userController controllers.CompControllers) {
+func ComplaintRoutes(r *gin.RouterGroup, scheduleController controllers.CompControllers) {
 	complaintGroup := r.Group("/complaint")
 	{
-		complaintGroup.POST("/create", userController.Create)
-		complaintGroup.GET("/getall", userController.FindAll)
+		complaintGroup.POST("/create", scheduleController.Create)
+		complaintGroup.GET("/getall", scheduleController.FindAll)
 	}
 }

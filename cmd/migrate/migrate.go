@@ -10,6 +10,7 @@ func main() {
 
 	err := db.AutoMigrate(
 		&models.Complaints{},
+		&models.Schedules{},
 	)
 	if err != nil {
 		panic("failed to migrate models: " + err.Error())
