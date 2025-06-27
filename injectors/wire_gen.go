@@ -10,6 +10,9 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/google/wire"
 	"gorm.io/gorm"
+	controllers4 "kutamukti-api/api/announcement/controllers"
+	repositories4 "kutamukti-api/api/announcement/repositories"
+	services4 "kutamukti-api/api/announcement/services"
 	controllers2 "kutamukti-api/api/complaint/controllers"
 	repositories2 "kutamukti-api/api/complaint/repositories"
 	services2 "kutamukti-api/api/complaint/services"
@@ -44,6 +47,13 @@ func InitializeScheduleController(db *gorm.DB, validate *validator.Validate) con
 	return compControllers
 }
 
+func InitializeAnnouncementController(db *gorm.DB, validate *validator.Validate) controllers4.CompControllers {
+	compRepositories := repositories4.NewComponentRepository()
+	compServices := services4.NewComponentServices(compRepositories, db, validate)
+	compControllers := controllers4.NewCompController(compServices)
+	return compControllers
+}
+
 // injector.go:
 
 var userFeatureSet = wire.NewSet(repositories.NewComponentRepository, services.NewComponentServices, controllers.NewCompController)
@@ -51,3 +61,5 @@ var userFeatureSet = wire.NewSet(repositories.NewComponentRepository, services.N
 var complaintFeatureSet = wire.NewSet(repositories2.NewComponentRepository, services2.NewComponentServices, controllers2.NewCompController)
 
 var scheduleFeatureSet = wire.NewSet(repositories3.NewComponentRepository, services3.NewComponentServices, controllers3.NewCompController)
+
+var announcementFeatureSet = wire.NewSet(repositories4.NewComponentRepository, services4.NewComponentServices, controllers4.NewCompController)

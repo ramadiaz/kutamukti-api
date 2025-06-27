@@ -20,8 +20,10 @@ func CompRouters(r *gin.RouterGroup, db *gorm.DB, validate *validator.Validate) 
 	userController := injectors.InitializeUserController(db, validate)
 	complaintController := injectors.InitializeComplaintController(db, validate)
 	scheduleController := injectors.InitializeScheduleController(db, validate)
+	announcementController := injectors.InitializeAnnouncementController(db, validate)
 
 	UserRoutes(r, userController)
 	ComplaintRoutes(r, complaintController)
 	ScheduleRoutes(r, scheduleController)
+	AnnouncementRoutes(r, announcementController)
 }

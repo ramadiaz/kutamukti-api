@@ -10,7 +10,7 @@ type Complaints struct {
 	gorm.Model
 
 	ID          int64  `gorm:"primaryKey"`
-	UUID        string `gorm:"unique;index"`
+	UUID        string `gorm:"not null;unique;index"`
 	Title       string `gorm:"not null"`
 	Description string `gorm:"not null"`
 
