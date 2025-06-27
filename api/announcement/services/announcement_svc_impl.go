@@ -1,11 +1,14 @@
 package services
 
 import (
+	"fmt"
 	"kutamukti-api/api/announcement/dto"
 	"kutamukti-api/api/announcement/repositories"
 	"kutamukti-api/pkg/exceptions"
 	"kutamukti-api/pkg/helpers"
+	"kutamukti-api/pkg/logger"
 	"kutamukti-api/pkg/mapper"
+	"kutamukti-api/pkg/whatsapp"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -41,6 +44,21 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.Announcement) *exce
 	if err != nil {
 		return err
 	}
+
+	go func() {
+		message := fmt.Sprintf(`
+*PENGUMUMAN BARU!*
+
+%s
+
+%s
+		`, input.Title, input.Description)
+
+		err := whatsapp.Send("6281382009156-1571306561@g.us", message)
+		if err != nil {
+			logger.Error("error sending whatsapp: %v", err)
+		}
+	}()
 
 	return nil
 }
