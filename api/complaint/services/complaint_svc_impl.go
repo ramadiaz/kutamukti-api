@@ -50,7 +50,7 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.Complaint) *excepti
 
 	go func() {
 		message := fmt.Sprintf(`
-LAPORAN PENGADUAN BARU!
+*LAPORAN PENGADUAN BARU!*
 
 Dibuat pada: %s
 Laporan: %s
