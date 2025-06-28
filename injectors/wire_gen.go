@@ -19,6 +19,9 @@ import (
 	controllers3 "kutamukti-api/api/schedule/controllers"
 	repositories3 "kutamukti-api/api/schedule/repositories"
 	services3 "kutamukti-api/api/schedule/services"
+	controllers5 "kutamukti-api/api/umkm/controllers"
+	repositories5 "kutamukti-api/api/umkm/repositories"
+	services5 "kutamukti-api/api/umkm/services"
 	"kutamukti-api/api/users/controllers"
 	"kutamukti-api/api/users/repositories"
 	"kutamukti-api/api/users/services"
@@ -54,6 +57,13 @@ func InitializeAnnouncementController(db *gorm.DB, validate *validator.Validate)
 	return compControllers
 }
 
+func InitializeUMKMController(db *gorm.DB, validate *validator.Validate) controllers5.CompControllers {
+	compRepositories := repositories5.NewComponentRepository()
+	compServices := services5.NewComponentServices(compRepositories, db, validate)
+	compControllers := controllers5.NewCompController(compServices)
+	return compControllers
+}
+
 // injector.go:
 
 var userFeatureSet = wire.NewSet(repositories.NewComponentRepository, services.NewComponentServices, controllers.NewCompController)
@@ -63,3 +73,5 @@ var complaintFeatureSet = wire.NewSet(repositories2.NewComponentRepository, serv
 var scheduleFeatureSet = wire.NewSet(repositories3.NewComponentRepository, services3.NewComponentServices, controllers3.NewCompController)
 
 var announcementFeatureSet = wire.NewSet(repositories4.NewComponentRepository, services4.NewComponentServices, controllers4.NewCompController)
+
+var umkmFeatureSet = wire.NewSet(repositories5.NewComponentRepository, services5.NewComponentServices, controllers5.NewCompController)

@@ -22,6 +22,10 @@ import (
 	announcementRepositories "kutamukti-api/api/announcement/repositories"
 	announcementServices "kutamukti-api/api/announcement/services"
 
+	umkmControllers "kutamukti-api/api/umkm/controllers"
+	umkmRepositories "kutamukti-api/api/umkm/repositories"
+	umkmServices "kutamukti-api/api/umkm/services"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/google/wire"
 	"gorm.io/gorm"
@@ -51,6 +55,12 @@ var announcementFeatureSet = wire.NewSet(
 	announcementControllers.NewCompController,
 )
 
+var umkmFeatureSet = wire.NewSet(
+	umkmRepositories.NewComponentRepository,
+	umkmServices.NewComponentServices,
+	umkmControllers.NewCompController,
+)
+
 func InitializeUserController(db *gorm.DB, validate *validator.Validate) userControllers.CompControllers {
 	wire.Build(userFeatureSet)
 	return nil
@@ -68,5 +78,10 @@ func InitializeScheduleController(db *gorm.DB, validate *validator.Validate) sch
 
 func InitializeAnnouncementController(db *gorm.DB, validate *validator.Validate) announcementControllers.CompControllers {
 	wire.Build(announcementFeatureSet)
+	return nil
+}
+
+func InitializeUMKMController(db *gorm.DB, validate *validator.Validate) umkmControllers.CompControllers {
+	wire.Build(umkmFeatureSet)
 	return nil
 }
