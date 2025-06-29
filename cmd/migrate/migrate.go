@@ -13,6 +13,7 @@ func main() {
 		&models.Schedules{},
 		&models.Announcements{},
 		&models.UMKM{},
+		&models.Galleries{},
 	)
 	if err != nil {
 		panic("failed to migrate models: " + err.Error())

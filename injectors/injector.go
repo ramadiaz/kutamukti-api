@@ -26,6 +26,10 @@ import (
 	umkmRepositories "kutamukti-api/api/umkm/repositories"
 	umkmServices "kutamukti-api/api/umkm/services"
 
+	galleryControllers "kutamukti-api/api/gallery/controllers"
+	galleryRepositories "kutamukti-api/api/gallery/repositories"
+	galleryServices "kutamukti-api/api/gallery/services"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/google/wire"
 	"gorm.io/gorm"
@@ -61,6 +65,12 @@ var umkmFeatureSet = wire.NewSet(
 	umkmControllers.NewCompController,
 )
 
+var galleryFeatureSet = wire.NewSet(
+	galleryRepositories.NewComponentRepository,
+	galleryServices.NewComponentServices,
+	galleryControllers.NewCompController,
+)
+
 func InitializeUserController(db *gorm.DB, validate *validator.Validate) userControllers.CompControllers {
 	wire.Build(userFeatureSet)
 	return nil
@@ -83,5 +93,10 @@ func InitializeAnnouncementController(db *gorm.DB, validate *validator.Validate)
 
 func InitializeUMKMController(db *gorm.DB, validate *validator.Validate) umkmControllers.CompControllers {
 	wire.Build(umkmFeatureSet)
+	return nil
+}
+
+func InitializeGalleryController(db *gorm.DB, validate *validator.Validate) galleryControllers.CompControllers {
+	wire.Build(galleryFeatureSet)
 	return nil
 }
