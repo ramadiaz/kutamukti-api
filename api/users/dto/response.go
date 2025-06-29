@@ -7,7 +7,9 @@ type Response struct {
 }
 
 type UserOutput struct {
-	UUID  string `json:"uuid"`
-	Email string `json:"email"`
-	Name  string `json:"name"`
+	UUID     string `json:"uuid"`
+	Email    string `json:"email"`
+	Name     string `json:"name"`
+	Username string `json:"username"`
+	Role     Roles  `json:"role"`
 }

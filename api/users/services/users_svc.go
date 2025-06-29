@@ -8,5 +8,5 @@ import (
 )
 
 type CompServices interface {
-	Create(ctx *gin.Context, data dto.Users) *exceptions.Exception
+	Create(ctx *gin.Context, data dto.User) *exceptions.Exception
 }

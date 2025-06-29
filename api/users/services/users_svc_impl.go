@@ -26,7 +26,7 @@ func NewComponentServices(compRepositories repositories.CompRepositories, db *go
 	}
 }
 
-func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.Users) *exceptions.Exception {
+func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.User) *exceptions.Exception {
 	validateErr := s.validate.Struct(data)
 	if validateErr != nil {
 		return exceptions.NewValidationException(validateErr)
@@ -35,7 +35,12 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.Users) *exceptions.
 	tx := s.DB.Begin()
 	defer helpers.CommitOrRollback(tx)
 
-	hashedPassword, err := helpers.HashPassword(data.Passoword)
+	password, err := helpers.GeneratePassword(12)
+	if err != nil {
+		return err
+	}
+
+	hashedPassword, err := helpers.HashPassword(password)
 	if err != nil {
 		return err
 	}

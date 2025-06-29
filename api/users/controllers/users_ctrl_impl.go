@@ -20,7 +20,7 @@ func NewCompController(compServices services.CompServices) CompControllers {
 }
 
 func (h *CompControllersImpl) Create(ctx *gin.Context) {
-	var data dto.Users
+	var data dto.User
 
 	jsonErr := ctx.ShouldBindJSON(&data)
 	if jsonErr != nil {
