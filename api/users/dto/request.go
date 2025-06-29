@@ -7,6 +7,10 @@ const (
 	Staff Roles = "staff"
 )
 
+func (r Roles) String() string {
+	return string(r)
+}
+
 type User struct {
 	Email    string `json:"email" validate:"required,email"`
 	Username string `json:"username" validate:"required"`

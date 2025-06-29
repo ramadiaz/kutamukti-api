@@ -6,6 +6,12 @@ import (
 	"kutamukti-api/models"
 	"kutamukti-api/pkg/exceptions"
 	"kutamukti-api/pkg/helpers"
+	"log"
+	"strconv"
+	"time"
+
+	emailDTO "kutamukti-api/emails/dto"
+	emails "kutamukti-api/emails/services"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -52,6 +58,24 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.User) *exceptions.E
 	if err != nil {
 		return err
 	}
+
+	go func() {
+		err := emails.AccountCredentialsEmail(emailDTO.AccountCredentials{
+			Name:        data.Name,
+			Position:    data.Role.String(),
+			Email:       data.Email,
+			Username:    data.Username,
+			Password:    password,
+			LoginURL:    "https://dash.kutamukti.id/auth/login",
+			Year:        strconv.Itoa(time.Now().Year()),
+			FacebookURL: "https://www.facebook.com/kutamukti.id",
+			TwitterURL:  "https://twitter.com/kutamukti_id",
+			LinkedinURL: "https://www.linkedin.com/company/kutamukti/",
+		})
+		if err != nil {
+			log.Println(err)
+		}
+	}()
 
 	return nil
 }

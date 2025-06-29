@@ -6,9 +6,15 @@ type EmailRequest struct {
 	Body    string
 }
 
-type EmailExample struct {
-	Message string
-	Email   string
-	Subject string
-	Body    string
+type AccountCredentials struct {
+	Name        string
+	Position    string
+	Email       string
+	Username    string
+	Password    string
+	LoginURL    string
+	Year        string
+	FacebookURL string
+	TwitterURL  string
+	LinkedinURL string
 }

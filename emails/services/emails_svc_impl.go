@@ -3,11 +3,11 @@ package emails
 import (
 	"bytes"
 	"html/template"
+	"kutamukti-api/emails/dto"
+	"kutamukti-api/pkg/exceptions"
 	"net/http"
 	"os"
 	"strconv"
-	"kutamukti-api/emails/dto"
-	"kutamukti-api/pkg/exceptions"
 
 	"gopkg.in/gomail.v2"
 )
@@ -38,8 +38,8 @@ func SendEmail(data dto.EmailRequest) *exceptions.Exception {
 	return nil
 }
 
-func ExampleEmail(data dto.EmailExample) *exceptions.Exception {
-	tmpl, exc := template.ParseFiles("emails/templates/example.html")
+func AccountCredentialsEmail(data dto.AccountCredentials) *exceptions.Exception {
+	tmpl, exc := template.ParseFiles("emails/templates/account_credentials.html")
 	if exc != nil {
 		return exceptions.NewException(http.StatusInternalServerError, exc.Error())
 	}
@@ -51,7 +51,7 @@ func ExampleEmail(data dto.EmailExample) *exceptions.Exception {
 
 	emailData := dto.EmailRequest{
 		Email:   data.Email,
-		Subject: data.Subject,
+		Subject: "Akun Dashboard Staff Desa Kutamukti - Kredensial Akses Anda",
 		Body:    body.String(),
 	}
 
