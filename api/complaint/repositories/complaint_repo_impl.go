@@ -34,3 +34,12 @@ func (r *CompRepositoriesImpl) FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.
 
 	return output, nil
 }
+
+func (r *CompRepositoriesImpl) UpdateStatus(ctx *gin.Context, tx *gorm.DB, uuid string, status models.ComplaintStatus) *exceptions.Exception {
+	result := tx.Model(&models.Complaints{}).Where("uuid = ?", uuid).Update("status", status)
+	if result.Error != nil {
+		return exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return nil
+}

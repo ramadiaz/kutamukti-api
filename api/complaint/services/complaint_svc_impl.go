@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"kutamukti-api/api/complaint/dto"
 	"kutamukti-api/api/complaint/repositories"
+	"kutamukti-api/models"
 	"kutamukti-api/pkg/exceptions"
 	"kutamukti-api/pkg/helpers"
 	"kutamukti-api/pkg/logger"
@@ -78,4 +79,8 @@ func (s *CompServicesImpl) FindAll(ctx *gin.Context) ([]dto.ComplaintResponse, *
 	}
 
 	return response, nil
+}
+
+func (s *CompServicesImpl) UpdateStatus(ctx *gin.Context, uuid string, status dto.ComplaintStatus) *exceptions.Exception {
+	return s.repo.UpdateStatus(ctx, s.DB, uuid, models.ComplaintStatus(status))
 }

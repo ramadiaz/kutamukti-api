@@ -53,3 +53,24 @@ func (h *CompControllersImpl) FindAll(ctx *gin.Context) {
 		Body:    output,
 	})
 }
+
+func (h *CompControllersImpl) UpdateStatus(ctx *gin.Context) {
+	uuid := ctx.Query("uuid")
+	status := ctx.Query("status")
+
+	if uuid == "" || status == "" {
+		ctx.JSON(http.StatusBadRequest, exceptions.NewException(http.StatusBadRequest, exceptions.ErrBadRequest))
+		return
+	}
+
+	err := h.services.UpdateStatus(ctx, uuid, dto.ComplaintStatus(status))
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, dto.Response{
+		Status:  http.StatusOK,
+		Message: "success",
+	})
+}

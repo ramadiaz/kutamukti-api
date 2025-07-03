@@ -12,5 +12,6 @@ func ComplaintRoutes(r *gin.RouterGroup, scheduleController controllers.CompCont
 	{
 		complaintGroup.POST("/create", scheduleController.Create)
 		complaintGroup.GET("/getall", middleware.StaffMiddleware(), scheduleController.FindAll)
+		complaintGroup.PUT("/update", middleware.StaffMiddleware(), scheduleController.UpdateStatus)
 	}
 }
