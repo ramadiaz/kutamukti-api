@@ -23,3 +23,14 @@ func (r *CompRepositoriesImpl) Create(ctx *gin.Context, tx *gorm.DB, data models
 
 	return nil
 }
+
+func (r *CompRepositoriesImpl) FindByUsername(ctx *gin.Context, tx *gorm.DB, username string) (*models.Users, *exceptions.Exception) {
+	var output models.Users
+
+	result := tx.Where("username = ?", username).First(&output)
+	if result.Error != nil {
+		return nil, exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return &output, nil
+}

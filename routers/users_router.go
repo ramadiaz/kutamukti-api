@@ -11,5 +11,6 @@ func UserRoutes(r *gin.RouterGroup, userController controllers.CompControllers) 
 	userGroup := r.Group("/user")
 	{
 		userGroup.POST("/create", middleware.AdminMiddleware(), userController.Create)
+		userGroup.POST("/signin", userController.SignIn)
 	}
 }

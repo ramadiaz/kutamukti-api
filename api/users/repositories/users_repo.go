@@ -9,5 +9,6 @@ import (
 )
 
 type CompRepositories interface {
-	Create(ctx *gin.Context, tx *gorm.DB, data models.Users) *exceptions.Exception 
+	Create(ctx *gin.Context, tx *gorm.DB, data models.Users) *exceptions.Exception
+	FindByUsername(ctx *gin.Context, tx *gorm.DB, username string) (*models.Users, *exceptions.Exception)
 }

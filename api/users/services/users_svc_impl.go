@@ -7,12 +7,15 @@ import (
 	"kutamukti-api/pkg/exceptions"
 	"kutamukti-api/pkg/helpers"
 	"log"
+	"net/http"
+	"os"
 	"strconv"
 	"time"
 
 	emailDTO "kutamukti-api/emails/dto"
 	emails "kutamukti-api/emails/services"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
@@ -78,4 +81,41 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.User) *exceptions.E
 	}()
 
 	return nil
+}
+
+func (s *CompServicesImpl) SignIn(ctx *gin.Context, data dto.UserSignIn) (*string, *exceptions.Exception) {
+	validateErr := s.validate.Struct(data)
+	if validateErr != nil {
+		return nil, exceptions.NewValidationException(validateErr)
+	}
+
+	user, err := s.repo.FindByUsername(ctx, s.DB, data.Username)
+	if err != nil {
+		return nil, err
+	}
+
+	err = helpers.CheckPasswordHash(data.Password, user.HashedPassword)
+	if err != nil {
+		return nil, err
+	}
+
+	JWT_SECRET := os.Getenv("JWT_SECRET")
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+
+	claims["uuid"] = user.UUID
+	claims["email"] = user.Email
+	claims["name"] = user.Name
+	claims["username"] = user.Username
+	claims["role"] = user.Role
+
+	claims["exp"] = time.Now().Add(time.Hour * 24 * 7).Unix()
+
+	secretKey := []byte(JWT_SECRET)
+	tokenString, signErr := token.SignedString(secretKey)
+	if signErr != nil {
+		return nil, exceptions.NewException(http.StatusInternalServerError, exceptions.ErrTokenGenerate)
+	}
+
+	return &tokenString, nil
 }

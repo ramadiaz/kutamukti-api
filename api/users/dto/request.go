@@ -17,3 +17,8 @@ type User struct {
 	Name     string `json:"name" validate:"required"`
 	Role     Roles  `json:"role" validate:"required,oneof=admin staff"`
 }
+
+type UserSignIn struct {
+	Username string `json:"username" validate:"required"`
+	Password string `json:"password" validate:"required"`
+}
