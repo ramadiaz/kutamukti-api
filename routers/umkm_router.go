@@ -2,6 +2,7 @@ package routers
 
 import (
 	"kutamukti-api/api/umkm/controllers"
+	"kutamukti-api/pkg/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,6 +10,6 @@ import (
 func UMKMRoutes(r *gin.RouterGroup, umkmController controllers.CompControllers) {
 	umkmGroup := r.Group("/umkm")
 	{
-		umkmGroup.POST("/create", umkmController.Create)
+		umkmGroup.POST("/create", middleware.StaffMiddleware(), umkmController.Create)
 	}
 }
