@@ -14,6 +14,7 @@ func main() {
 		&models.Announcements{},
 		&models.UMKM{},
 		&models.Galleries{},
+		&models.Users{},
 	)
 	if err != nil {
 		panic("failed to migrate models: " + err.Error())

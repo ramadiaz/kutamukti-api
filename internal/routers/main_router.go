@@ -1,6 +1,7 @@
 package routers
 
 import (
+	mainInjectors "kutamukti-api/injectors"
 	"kutamukti-api/internal/injectors"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,8 @@ import (
 
 func InternalRouters(r *gin.RouterGroup, db *gorm.DB, validate *validator.Validate) {
 	internalController := injectors.InitializeAuthController(validate)
+	userController := mainInjectors.InitializeUserController(db, validate)
 
 	AuthRoutes(r, internalController)
+	UserRoutes(r, userController)
 }
