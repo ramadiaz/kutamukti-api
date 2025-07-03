@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"kutamukti-api/emails/dto"
 	"kutamukti-api/pkg/exceptions"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -34,6 +35,8 @@ func SendEmail(data dto.EmailRequest) *exceptions.Exception {
 	if err := d.DialAndSend(m); err != nil {
 		return exceptions.NewException(http.StatusBadGateway, err.Error())
 	}
+
+	log.Println("Email sent successfully to: " + data.Email)
 
 	return nil
 }

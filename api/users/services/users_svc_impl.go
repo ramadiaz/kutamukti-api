@@ -18,6 +18,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -55,8 +56,12 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.User) *exceptions.E
 	}
 
 	err = s.repo.Create(ctx, tx, models.Users{
+		UUID:           uuid.NewString(),
 		Email:          data.Email,
 		HashedPassword: hashedPassword,
+		Username:       data.Username,
+		Name:           data.Name,
+		Role:           models.Roles(data.Role),
 	})
 	if err != nil {
 		return err
