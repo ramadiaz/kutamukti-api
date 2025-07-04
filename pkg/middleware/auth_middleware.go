@@ -50,7 +50,7 @@ func StaffMiddleware() gin.HandlerFunc {
 			Email:    claims["email"].(string),
 			Name:     claims["name"].(string),
 			Username: claims["username"].(string),
-			Role:     claims["role"].(dto.Roles),
+			Role:     dto.Roles(claims["role"].(string)),
 		}
 
 		c.Set("user", user)
@@ -97,7 +97,7 @@ func AdminMiddleware() gin.HandlerFunc {
 			Email:    claims["email"].(string),
 			Name:     claims["name"].(string),
 			Username: claims["username"].(string),
-			Role:     claims["role"].(dto.Roles),
+			Role:     dto.Roles(claims["role"].(string)),
 		}
 
 		if user.Role != dto.Admin {
