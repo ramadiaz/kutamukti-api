@@ -9,6 +9,7 @@ import (
 	"kutamukti-api/pkg/logger"
 	"kutamukti-api/pkg/mapper"
 	"kutamukti-api/pkg/whatsapp"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -54,7 +55,7 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.Announcement) *exce
 %s
 		`, input.Title, input.Description)
 
-		err := whatsapp.Send("6281382009156-1571306561@g.us", message)
+		err := whatsapp.Send(os.Getenv("FONNTE_GROUP_ANNOUNCEMENT_ID"), message)
 		if err != nil {
 			logger.Error("error sending whatsapp: %v", err)
 		}

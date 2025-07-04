@@ -10,6 +10,7 @@ import (
 	"kutamukti-api/pkg/logger"
 	"kutamukti-api/pkg/mapper"
 	"kutamukti-api/pkg/whatsapp"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -58,7 +59,7 @@ Laporan: %s
 Pesan: %s
 		`, helpers.FormatIndonesianTime(time.Now()), input.Title, input.Description)
 
-		err := whatsapp.Send("6281382009156-1571306561@g.us", message)
+		err := whatsapp.Send(os.Getenv("FONNTE_GROUP_COMPLAINT_ID"), message)
 		if err != nil {
 			logger.Error("error sending whatsapp: %v", err)
 		}
