@@ -22,6 +22,9 @@ import (
 	controllers3 "kutamukti-api/api/schedule/controllers"
 	repositories3 "kutamukti-api/api/schedule/repositories"
 	services3 "kutamukti-api/api/schedule/services"
+	controllers7 "kutamukti-api/api/storages/controllers"
+	repositories7 "kutamukti-api/api/storages/repositories"
+	services7 "kutamukti-api/api/storages/services"
 	controllers5 "kutamukti-api/api/umkm/controllers"
 	repositories5 "kutamukti-api/api/umkm/repositories"
 	services5 "kutamukti-api/api/umkm/services"
@@ -74,6 +77,13 @@ func InitializeGalleryController(db *gorm.DB, validate *validator.Validate) cont
 	return compControllers
 }
 
+func InitializeStorageController(db *gorm.DB, validate *validator.Validate) controllers7.CompControllers {
+	compRepositories := repositories7.NewComponentRepository()
+	compServices := services7.NewComponentServices(compRepositories, db)
+	compControllers := controllers7.NewCompController(compServices)
+	return compControllers
+}
+
 // injector.go:
 
 var userFeatureSet = wire.NewSet(repositories.NewComponentRepository, services.NewComponentServices, controllers.NewCompController)
@@ -87,3 +97,5 @@ var announcementFeatureSet = wire.NewSet(repositories4.NewComponentRepository, s
 var umkmFeatureSet = wire.NewSet(repositories5.NewComponentRepository, services5.NewComponentServices, controllers5.NewCompController)
 
 var galleryFeatureSet = wire.NewSet(repositories6.NewComponentRepository, services6.NewComponentServices, controllers6.NewCompController)
+
+var storageFeatureSet = wire.NewSet(repositories7.NewComponentRepository, services7.NewComponentServices, controllers7.NewCompController)
