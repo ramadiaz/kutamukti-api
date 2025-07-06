@@ -4,6 +4,7 @@ import (
 	"kutamukti-api/api/complaint/dto"
 	"kutamukti-api/api/complaint/services"
 	"kutamukti-api/pkg/exceptions"
+	"kutamukti-api/pkg/helpers"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -25,6 +26,13 @@ func (h *CompControllersImpl) Create(ctx *gin.Context) {
 	jsonErr := ctx.ShouldBindJSON(&data)
 	if jsonErr != nil {
 		ctx.JSON(http.StatusBadRequest, exceptions.NewException(http.StatusBadRequest, exceptions.ErrBadRequest))
+		return
+	}
+
+	if !helpers.VerifyRecaptcha(data.Captcha) {
+		ctx.JSON(http.StatusBadRequest, dto.Response{
+			Message: "CAPTCHA verification failed",
+		})
 		return
 	}
 
