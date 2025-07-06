@@ -21,7 +21,7 @@ func NewCompController(compServices services.CompServices) CompControllers {
 	}
 }
 
-func (h *CompControllersImpl) Create(ctx *gin.Context) {
+func (h *CompControllersImpl) CreateImage(ctx *gin.Context) {
 	file, fileErr := ctx.FormFile("file")
 	if fileErr != nil {
 		ctx.JSON(http.StatusBadRequest, exceptions.NewException(http.StatusBadRequest, exceptions.ErrBadRequest))
@@ -56,6 +56,11 @@ func (h *CompControllersImpl) Create(ctx *gin.Context) {
 		mimeSubType = mimeParts[1]
 	}
 
+	if mimeMainType != "image" {
+		ctx.JSON(http.StatusBadRequest, exceptions.NewException(http.StatusBadRequest, exceptions.ErrFileFormat))
+		return
+	}
+
 	fileData := dto.FilesInputDTO{
 		OriginalFileName: fileName,
 		Size:             helpers.FormatFileSize(file.Size),
@@ -65,7 +70,13 @@ func (h *CompControllersImpl) Create(ctx *gin.Context) {
 		Meta:             "{}",
 	}
 
-	result, err := h.services.Create(ctx, buffer, fileData)
+	compressed, err := helpers.ResizeImage(buffer, 800)
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+
+	result, err := h.services.Create(ctx, compressed, fileData)
 	if err != nil {
 		ctx.JSON(err.Status, err)
 		return

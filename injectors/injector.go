@@ -29,11 +29,12 @@ import (
 	galleryControllers "kutamukti-api/api/gallery/controllers"
 	galleryRepositories "kutamukti-api/api/gallery/repositories"
 	galleryServices "kutamukti-api/api/gallery/services"
-	
+
 	storageControllers "kutamukti-api/api/storages/controllers"
 	storageRepositories "kutamukti-api/api/storages/repositories"
 	storageServices "kutamukti-api/api/storages/services"
 
+	"google.golang.org/api/drive/v3"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/wire"
 	"gorm.io/gorm"
@@ -111,7 +112,7 @@ func InitializeGalleryController(db *gorm.DB, validate *validator.Validate) gall
 	return nil
 }
 
-func InitializeStorageController(db *gorm.DB, validate *validator.Validate) storageControllers.CompControllers {
+func InitializeStorageController(db *gorm.DB, validate *validator.Validate, drive *drive.Service) storageControllers.CompControllers {
 	wire.Build(storageFeatureSet)
 	return nil
 }

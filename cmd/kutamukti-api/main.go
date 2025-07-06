@@ -1,13 +1,13 @@
 package main
 
 import (
-	"log"
-	"os"
-	"time"
 	"kutamukti-api/pkg/config"
 	"kutamukti-api/pkg/logger"
 	"kutamukti-api/pkg/middleware"
 	"kutamukti-api/routers"
+	"log"
+	"os"
+	"time"
 
 	internalRouters "kutamukti-api/internal/routers"
 
@@ -39,6 +39,7 @@ func main() {
 	r.Use(cors.New(corsConfig))
 
 	db := config.InitDB()
+	drive := config.InitDriveServie()
 	validate := validator.New(validator.WithRequiredStructEnabled())
 	lmt := tollbooth.NewLimiter(5, &limiter.ExpirableOptions{DefaultExpirationTTL: time.Second})
 
@@ -49,7 +50,7 @@ func main() {
 	internalRouters.InternalRouters(internal, db, validate)
 
 	api := r.Group("/api")
-	routers.CompRouters(api, db, validate)
+	routers.CompRouters(api, db, validate, drive)
 
 	var host string
 	switch environment {

@@ -8,7 +8,8 @@ import (
 
 func StorageRoutes(r *gin.RouterGroup, storageController controllers.CompControllers) {
 	storageGroup := r.Group("/storage")
+	imageGroup := storageGroup.Group("/image")
 	{
-		storageGroup.POST("/create", storageController.Create)
+		imageGroup.POST("/create", storageController.CreateImage)
 	}
 }

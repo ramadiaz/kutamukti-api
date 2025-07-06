@@ -9,6 +9,7 @@ package injectors
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/google/wire"
+	"google.golang.org/api/drive/v3"
 	"gorm.io/gorm"
 	controllers4 "kutamukti-api/api/announcement/controllers"
 	repositories4 "kutamukti-api/api/announcement/repositories"
@@ -77,9 +78,9 @@ func InitializeGalleryController(db *gorm.DB, validate *validator.Validate) cont
 	return compControllers
 }
 
-func InitializeStorageController(db *gorm.DB, validate *validator.Validate) controllers7.CompControllers {
+func InitializeStorageController(db *gorm.DB, validate *validator.Validate, drive2 *drive.Service) controllers7.CompControllers {
 	compRepositories := repositories7.NewComponentRepository()
-	compServices := services7.NewComponentServices(compRepositories, db)
+	compServices := services7.NewComponentServices(compRepositories, db, drive2)
 	compControllers := controllers7.NewCompController(compServices)
 	return compControllers
 }

@@ -14,6 +14,7 @@ require (
 	github.com/google/wire v0.6.0
 	github.com/joho/godotenv v1.5.1
 	golang.org/x/crypto v0.39.0
+	golang.org/x/image v0.28.0
 	google.golang.org/api v0.240.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gorm.io/driver/postgres v1.5.11

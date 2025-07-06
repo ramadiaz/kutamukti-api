@@ -27,4 +27,7 @@ const (
 	ErrInvalidDate               = "invalid date"
 	ErrInvalidTokenStructure     = "invalid token structure"
 	ErrDataNotVerified           = "data not verified"
+	ErrImageDecode               = "failed to decode image"
+	ErrImageEncode               = "failed to encode image"
+	ErrFileFormat                = "invalid file format"
 )

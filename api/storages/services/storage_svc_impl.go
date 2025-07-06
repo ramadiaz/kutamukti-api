@@ -17,18 +17,19 @@ import (
 	"gorm.io/gorm"
 
 	"google.golang.org/api/drive/v3"
-	"google.golang.org/api/option"
 )
 
 type CompServicesImpl struct {
-	repo repositories.CompRepositories
-	DB   *gorm.DB
+	repo  repositories.CompRepositories
+	DB    *gorm.DB
+	drive *drive.Service
 }
 
-func NewComponentServices(compRepositories repositories.CompRepositories, db *gorm.DB) CompServices {
+func NewComponentServices(compRepositories repositories.CompRepositories, db *gorm.DB, drive *drive.Service) CompServices {
 	return &CompServicesImpl{
-		repo: compRepositories,
-		DB:   db,
+		repo:  compRepositories,
+		DB:    db,
+		drive: drive,
 	}
 }
 
@@ -57,36 +58,29 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, file []byte, data dto.FilesI
 }
 
 func (s *CompServicesImpl) DriveUpload(ctx *gin.Context, file []byte, name, mimeType string) (*string, *string, *exceptions.Exception) {
-	APPLICATION_CREDENTIALS := os.Getenv("GOOGLE_APPLICATION_CREDENTIALS")
 	APPLICATION_FOLDER_ID := os.Getenv("APPLICATION_FOLDER_ID")
 
-	driveService, err := drive.NewService(ctx, option.WithCredentialsJSON([]byte(APPLICATION_CREDENTIALS)))
-	if err != nil {
-		log.Println(err)
-		return nil, nil, exceptions.NewException(http.StatusBadGateway, exceptions.ErrFileUpload)
-	}
-	
 	fileMetadata := &drive.File{
 		Name:     name,
 		Parents:  []string{APPLICATION_FOLDER_ID},
 		MimeType: mimeType,
 	}
-	
+
 	fileReader := bytes.NewReader(file)
-	uploadedFile, err := driveService.Files.Create(fileMetadata).
-	Media(fileReader).
-	Fields("id, name, mimeType, size, createdTime").
-	Do()
+	uploadedFile, err := s.drive.Files.Create(fileMetadata).
+		Media(fileReader).
+		Fields("id, name, mimeType, size, createdTime").
+		Do()
 	if err != nil {
 		log.Println(err)
 		return nil, nil, exceptions.NewException(http.StatusBadGateway, exceptions.ErrFileUpload)
 	}
-	
-	_, err = driveService.Permissions.Create(uploadedFile.Id, &drive.Permission{
+
+	_, err = s.drive.Permissions.Create(uploadedFile.Id, &drive.Permission{
 		Role: "reader",
 		Type: "anyone",
-		}).Do()
-		if err != nil {
+	}).Do()
+	if err != nil {
 		log.Println(err)
 		return nil, nil, exceptions.NewException(http.StatusBadGateway, exceptions.ErrFilePermission)
 	}
