@@ -27,19 +27,25 @@ func NewComponentServices(compRepositories repositories.CompRepositories, db *go
 	}
 }
 
-func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.News) *exceptions.Exception {
+func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.News) (*dto.NewsResponse, *exceptions.Exception) {
 	validateErr := s.validate.Struct(data)
 	if validateErr != nil {
-		return exceptions.NewValidationException(validateErr)
+		return nil, exceptions.NewValidationException(validateErr)
 	}
 	input := mapper.MapNewsInputToModel(data)
 	input.UUID = uuid.NewString()
 	input.Slug = helpers.FormatSlug(input.Title)
 	err := s.repo.Create(ctx, s.DB, input)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	result, err := s.FindBySlug(ctx, input.Slug)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
 
 func (s *CompServicesImpl) FindAll(ctx *gin.Context) (*[]dto.NewsResponse, *exceptions.Exception) {
