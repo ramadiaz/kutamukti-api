@@ -25,6 +25,7 @@ func CompRouters(r *gin.RouterGroup, db *gorm.DB, validate *validator.Validate, 
 	umkmController := injectors.InitializeUMKMController(db, validate)
 	galleryController := injectors.InitializeGalleryController(db, validate)
 	storageController := injectors.InitializeStorageController(db, validate, drive)
+	newsController := injectors.InitializeNewsController(db, validate)
 
 	UserRoutes(r, userController)
 	ComplaintRoutes(r, complaintController)
@@ -33,4 +34,5 @@ func CompRouters(r *gin.RouterGroup, db *gorm.DB, validate *validator.Validate, 
 	UMKMRoutes(r, umkmController)
 	GalleryRoutes(r, galleryController)
 	StorageRoutes(r, storageController)
+	NewsRoutes(r, newsController)
 }

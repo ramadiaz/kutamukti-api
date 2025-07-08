@@ -33,6 +33,10 @@ import (
 	storageControllers "kutamukti-api/api/storages/controllers"
 	storageRepositories "kutamukti-api/api/storages/repositories"
 	storageServices "kutamukti-api/api/storages/services"
+	
+	newsControllers "kutamukti-api/api/news/controllers"
+	newsRepositories "kutamukti-api/api/news/repositories"
+	newsServices "kutamukti-api/api/news/services"
 
 	"google.golang.org/api/drive/v3"
 	"github.com/go-playground/validator/v10"
@@ -82,6 +86,12 @@ var storageFeatureSet = wire.NewSet(
 	storageControllers.NewCompController,
 )
 
+var newsFeatureSet = wire.NewSet(
+	newsRepositories.NewComponentRepository,
+	newsServices.NewComponentServices,
+	newsControllers.NewCompController,
+)
+
 func InitializeUserController(db *gorm.DB, validate *validator.Validate) userControllers.CompControllers {
 	wire.Build(userFeatureSet)
 	return nil
@@ -114,5 +124,10 @@ func InitializeGalleryController(db *gorm.DB, validate *validator.Validate) gall
 
 func InitializeStorageController(db *gorm.DB, validate *validator.Validate, drive *drive.Service) storageControllers.CompControllers {
 	wire.Build(storageFeatureSet)
+	return nil
+}
+
+func InitializeNewsController(db *gorm.DB, validate *validator.Validate) newsControllers.CompControllers {
+	wire.Build(newsFeatureSet)
 	return nil
 }
