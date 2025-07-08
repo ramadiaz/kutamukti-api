@@ -23,3 +23,40 @@ func (r *CompRepositoriesImpl) Create(ctx *gin.Context, tx *gorm.DB, data models
 
 	return nil
 }
+
+func (r *CompRepositoriesImpl) FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.News, *exceptions.Exception) {
+	var output []models.News
+
+	result := tx.
+		Preload("Images").
+		Find(&output).
+		Order("created_at DESC")
+	if result.Error != nil {
+		return nil, exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return output, nil
+}
+
+func (r *CompRepositoriesImpl) FindBySlug(ctx *gin.Context, tx *gorm.DB, slug string) (*models.News, *exceptions.Exception) {
+	var output models.News
+
+	result := tx.
+		Where("slug = ?", slug).
+		Preload("Images").
+		First(&output)
+	if result.Error != nil {
+		return nil, exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return &output, nil
+}
+
+func (r *CompRepositoriesImpl) DeleteByUUID(ctx *gin.Context, tx *gorm.DB, uuid string) *exceptions.Exception {
+	result := tx.Where("uuid = ?", uuid).Delete(&models.News{})
+	if result.Error != nil {
+		return exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return nil
+}

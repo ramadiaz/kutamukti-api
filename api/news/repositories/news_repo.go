@@ -10,4 +10,7 @@ import (
 
 type CompRepositories interface {
 	Create(ctx *gin.Context, tx *gorm.DB, data models.News) *exceptions.Exception
+	FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.News, *exceptions.Exception)
+	FindBySlug(ctx *gin.Context, tx *gorm.DB, slug string) (*models.News, *exceptions.Exception)
+	DeleteByUUID(ctx *gin.Context, tx *gorm.DB, uuid string) *exceptions.Exception
 }

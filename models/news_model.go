@@ -13,6 +13,7 @@ type News struct {
 	UUID         string `gorm:"not null;unique;index"`
 	Title        string `gorm:"not null"`
 	Content      string `gorm:"not null"`
+	RawText      string `gorm:"not null"`
 	Slug         string `gorm:"not null;unique;index"`
 	ThumbnailURL string `gorm:"not null"`
 

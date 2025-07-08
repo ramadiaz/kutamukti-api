@@ -41,3 +41,28 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.News) *exceptions.E
 	}
 	return nil
 }
+
+func (s *CompServicesImpl) FindAll(ctx *gin.Context) (*[]dto.NewsResponse, *exceptions.Exception) {
+	output, err := s.repo.FindAll(ctx, s.DB)
+	if err != nil {
+		return nil, err
+	}
+	var response []dto.NewsResponse
+	for _, v := range output {
+		response = append(response, mapper.MapNewsModelToOutput(v))
+	}
+	return &response, nil
+}
+
+func (s *CompServicesImpl) FindBySlug(ctx *gin.Context, slug string) (*dto.NewsResponse, *exceptions.Exception) {
+	output, err := s.repo.FindBySlug(ctx, s.DB, slug)
+	if err != nil {
+		return nil, err
+	}
+	response := mapper.MapNewsModelToOutput(*output)
+
+	return &response, nil
+}
+func (s *CompServicesImpl) DeleteByUUID(ctx *gin.Context, uuid string) *exceptions.Exception {
+	return s.repo.DeleteByUUID(ctx, s.DB, uuid)
+}
