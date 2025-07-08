@@ -6,7 +6,7 @@ type Response struct {
 	Body    interface{} `json:"body,omitempty"`
 }
 
-type UserOutput struct {
+type UserResponse struct {
 	UUID     string `json:"uuid"`
 	Email    string `json:"email"`
 	Name     string `json:"name"`

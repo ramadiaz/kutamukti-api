@@ -10,4 +10,5 @@ import (
 type CompServices interface {
 	Create(ctx *gin.Context, data dto.User) *exceptions.Exception
 	SignIn(ctx *gin.Context, data dto.UserSignIn) (*string, *exceptions.Exception)
+	FindAll(ctx *gin.Context) ([]dto.UserResponse, *exceptions.Exception)
 }

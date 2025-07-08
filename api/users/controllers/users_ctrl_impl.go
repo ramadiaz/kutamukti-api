@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"net/http"
 	"kutamukti-api/api/users/dto"
 	"kutamukti-api/api/users/services"
 	"kutamukti-api/pkg/exceptions"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -59,5 +59,18 @@ func (h *CompControllersImpl) SignIn(ctx *gin.Context) {
 		Status:  http.StatusOK,
 		Message: "success",
 		Body:    token,
+	})
+}
+
+func (h *CompControllersImpl) FindAll(ctx *gin.Context) {
+	data, err := h.services.FindAll(ctx)
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, dto.Response{
+		Status:  http.StatusOK,
+		Message: "success",
+		Body:    data,
 	})
 }

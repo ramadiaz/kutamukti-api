@@ -8,11 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetUserData(c *gin.Context) (dto.UserOutput, *exceptions.Exception) {
-	var result dto.UserOutput
+func GetUserData(c *gin.Context) (dto.UserResponse, *exceptions.Exception) {
+	var result dto.UserResponse
 	user_data, _ := c.Get("user")
 
-	result, ok := user_data.(dto.UserOutput)
+	result, ok := user_data.(dto.UserResponse)
 	if !ok {
 		return result, exceptions.NewException(http.StatusUnauthorized, exceptions.ErrInvalidTokenStructure)
 	}

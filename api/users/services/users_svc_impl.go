@@ -6,6 +6,7 @@ import (
 	"kutamukti-api/models"
 	"kutamukti-api/pkg/exceptions"
 	"kutamukti-api/pkg/helpers"
+	"kutamukti-api/pkg/mapper"
 	"log"
 	"net/http"
 	"os"
@@ -123,4 +124,18 @@ func (s *CompServicesImpl) SignIn(ctx *gin.Context, data dto.UserSignIn) (*strin
 	}
 
 	return &tokenString, nil
+}
+
+func (s *CompServicesImpl) FindAll(ctx *gin.Context) ([]dto.UserResponse, *exceptions.Exception) {
+	output, err := s.repo.FindAll(ctx, s.DB)
+	if err != nil {
+		return nil, err
+	}
+
+	var response []dto.UserResponse
+	for _, v := range output {
+		response = append(response, mapper.MapUserModelToOutput(v))
+	}
+
+	return response, nil
 }

@@ -34,3 +34,14 @@ func (r *CompRepositoriesImpl) FindByUsername(ctx *gin.Context, tx *gorm.DB, use
 
 	return &output, nil
 }
+
+func (r *CompRepositoriesImpl) FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.Users, *exceptions.Exception) {
+	var output []models.Users
+
+	result := tx.Find(&output)
+	if result.Error != nil {
+		return nil, exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return output, nil
+}

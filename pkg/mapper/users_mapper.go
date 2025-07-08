@@ -13,3 +13,9 @@ func MapUserInputToModel(input dto.User) models.Users {
 	mapstructure.Decode(input, &user)
 	return user
 }
+
+func MapUserModelToOutput(input models.Users) dto.UserResponse {
+	var user dto.UserResponse
+	mapstructure.Decode(input, &user)
+	return user
+}

@@ -45,7 +45,7 @@ func StaffMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		user := dto.UserOutput{
+		user := dto.UserResponse{
 			UUID:     claims["uuid"].(string),
 			Email:    claims["email"].(string),
 			Name:     claims["name"].(string),
@@ -92,7 +92,7 @@ func AdminMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		user := dto.UserOutput{
+		user := dto.UserResponse{
 			UUID:     claims["uuid"].(string),
 			Email:    claims["email"].(string),
 			Name:     claims["name"].(string),
