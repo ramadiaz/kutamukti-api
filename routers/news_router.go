@@ -13,6 +13,6 @@ func NewsRoutes(r *gin.RouterGroup, newsController controllers.CompControllers) 
 		newsGroup.POST("/create", middleware.StaffMiddleware(), newsController.Create)
 		newsGroup.GET("/getall", newsController.FindAll)
 		newsGroup.GET("/:slug", newsController.FindBySlug)
-		newsGroup.DELETE("/delete/:uuid", middleware.StaffMiddleware(), newsController.DeleteByUUID)
+		newsGroup.DELETE("/:uuid", middleware.StaffMiddleware(), newsController.DeleteByUUID)
 	}
 }
