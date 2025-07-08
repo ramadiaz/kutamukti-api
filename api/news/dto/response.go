@@ -15,6 +15,14 @@ type NewsResponse struct {
 	RawText      string       `json:"raw_text"`
 	Slug         string       `json:"slug"`
 	ThumbnailURL string       `json:"thumbnail_url"`
-	CreatedAt    time.Time    `json:"created_at"`
 	Images       []NewsImages `json:"images"`
+
+	CreatedAt time.Time `json:"created_at"`
+
+	User NewsAuthor `json:"author"`
+}
+
+type NewsAuthor struct {
+	UUID string `json:"uuid"`
+	Name string `json:"name"`
 }

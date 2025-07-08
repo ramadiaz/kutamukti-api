@@ -29,6 +29,7 @@ func (r *CompRepositoriesImpl) FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.
 
 	result := tx.
 		Preload("Images").
+		Preload("User").
 		Find(&output).
 		Order("created_at DESC")
 	if result.Error != nil {
@@ -42,8 +43,9 @@ func (r *CompRepositoriesImpl) FindBySlug(ctx *gin.Context, tx *gorm.DB, slug st
 	var output models.News
 
 	result := tx.
-		Where("slug = ?", slug).
+		Preload("User").
 		Preload("Images").
+		Where("slug = ?", slug).
 		First(&output)
 	if result.Error != nil {
 		return nil, exceptions.ParseGormError(tx, result.Error)

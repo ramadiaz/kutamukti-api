@@ -2,6 +2,7 @@ package exceptions
 
 import (
 	"errors"
+	"log"
 	"net/http"
 	"strings"
 
@@ -12,6 +13,8 @@ func ParseGormError(tx *gorm.DB, err error) *Exception {
 	if tx != nil && tx.Statement != nil && !errors.Is(err, gorm.ErrRecordNotFound){
 		tx.Rollback()
 	}
+
+	log.Println(err)
 	
 	switch {
 	case errors.Is(err, gorm.ErrRecordNotFound):

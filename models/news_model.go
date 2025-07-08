@@ -11,6 +11,7 @@ type News struct {
 
 	ID           int64  `gorm:"primaryKey"`
 	UUID         string `gorm:"not null;unique;index"`
+	UserUUID     string `gorm:"not null;index"`
 	Title        string `gorm:"not null"`
 	Content      string `gorm:"not null"`
 	RawText      string `gorm:"not null"`
@@ -22,6 +23,7 @@ type News struct {
 	DeletedAt *time.Time `gorm:"index"`
 
 	Images []NewsImages `gorm:"foreignKey:NewsID"`
+	User   Users        `gorm:"foreignKey:UserUUID;references:UUID"`
 }
 
 type NewsImages struct {

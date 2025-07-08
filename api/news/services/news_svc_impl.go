@@ -32,14 +32,18 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.News) (*dto.NewsRes
 	if validateErr != nil {
 		return nil, exceptions.NewValidationException(validateErr)
 	}
-	input := mapper.MapNewsInputToModel(data)
-	input.UUID = uuid.NewString()
-	input.Slug = helpers.FormatSlug(input.Title)
-	err := s.repo.Create(ctx, s.DB, input)
+	userData, err := helpers.GetUserData(ctx)
 	if err != nil {
 		return nil, err
 	}
-
+	input := mapper.MapNewsInputToModel(data)
+	input.UUID = uuid.NewString()
+	input.Slug = helpers.FormatSlug(input.Title)
+	input.UserUUID = userData.UUID
+	err = s.repo.Create(ctx, s.DB, input)
+	if err != nil {
+		return nil, err
+	}
 	result, err := s.FindBySlug(ctx, input.Slug)
 	if err != nil {
 		return nil, err
