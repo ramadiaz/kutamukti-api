@@ -1,15 +1,13 @@
 package dto
 
-type ItemTypes string
-
-const (
-	Image ItemTypes = "image"
-	Video ItemTypes = "video"
-)
-
-type Gallery struct {
-	Type        ItemTypes `json:"type" validate:"required"`
-	Title       string    `json:"title" validate:"required"`
-	Description string    `json:"description" validate:"required"`
-	Slug        string    `json:"slug" validate:"required"`
+type ImageGalleries struct {
+	Title  string   `json:"title" validate:"required"`
+	Images []Images `json:"images" validate:"required"`
 }
+
+type Images struct {
+	ImageURL    string `json:"image_url" validate:"required"`
+	Description string `json:"description" validate:"required"`
+}
+
+

@@ -15,7 +15,7 @@ func NewComponentRepository() CompRepositories {
 	return &CompRepositoriesImpl{}
 }
 
-func (r *CompRepositoriesImpl) Create(ctx *gin.Context, tx *gorm.DB, data models.Galleries) *exceptions.Exception {
+func (r *CompRepositoriesImpl) Create(ctx *gin.Context, tx *gorm.DB, data models.ImageGalleries) *exceptions.Exception {
 	result := tx.Create(&data)
 	if result.Error != nil {
 		return exceptions.ParseGormError(tx, result.Error)
@@ -24,10 +24,13 @@ func (r *CompRepositoriesImpl) Create(ctx *gin.Context, tx *gorm.DB, data models
 	return nil
 }
 
-func (r *CompRepositoriesImpl) FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.Galleries, *exceptions.Exception) {
-	var output []models.Galleries
+func (r *CompRepositoriesImpl) FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.ImageGalleries, *exceptions.Exception) {
+	var output []models.ImageGalleries
 
-	result := tx.Find(&output)
+	result := tx.
+		Preload("Images").
+		Find(&output).
+		Order("created_at DESC")
 	if result.Error != nil {
 		return nil, exceptions.ParseGormError(tx, result.Error)
 	}
@@ -35,7 +38,7 @@ func (r *CompRepositoriesImpl) FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.
 	return output, nil
 }
 
-func (r *CompRepositoriesImpl) Update(ctx *gin.Context, tx *gorm.DB, data models.Galleries) *exceptions.Exception {
+func (r *CompRepositoriesImpl) Update(ctx *gin.Context, tx *gorm.DB, data models.ImageGalleries) *exceptions.Exception {
 	result := tx.Save(&data)
 	if result.Error != nil {
 		return exceptions.ParseGormError(tx, result.Error)
@@ -44,7 +47,7 @@ func (r *CompRepositoriesImpl) Update(ctx *gin.Context, tx *gorm.DB, data models
 	return nil
 }
 
-func (r *CompRepositoriesImpl) Delete(ctx *gin.Context, tx *gorm.DB, data models.Galleries) *exceptions.Exception {
+func (r *CompRepositoriesImpl) Delete(ctx *gin.Context, tx *gorm.DB, data models.ImageGalleries) *exceptions.Exception {
 	result := tx.Delete(&data)
 	if result.Error != nil {
 		return exceptions.ParseGormError(tx, result.Error)

@@ -7,14 +7,15 @@ import (
 	"github.com/go-viper/mapstructure/v2"
 )
 
-func MapGalleryInputToModel(input dto.Gallery) models.Galleries {
-	var output models.Galleries
+func MapImageGalleriesInputToModel(input dto.ImageGalleries) models.ImageGalleries {
+	var output models.ImageGalleries
 	mapstructure.Decode(input, &output)
 	return output
 }
 
-func MapGalleryModelToOutput(input models.Galleries) dto.GalleryResponse {
-	var output dto.GalleryResponse
+func MapImageGalleriesModelToOutput(input models.ImageGalleries) dto.ImageGalleriesResponse {
+	var output dto.ImageGalleriesResponse
 	mapstructure.Decode(input, &output)
+	output.CreatedAt = input.CreatedAt
 	return output
 }

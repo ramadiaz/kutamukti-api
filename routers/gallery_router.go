@@ -10,6 +10,8 @@ import (
 func GalleryRoutes(r *gin.RouterGroup, galleryController controllers.CompControllers) {
 	galleryGroup := r.Group("/gallery")
 	{
-		galleryGroup.POST("/create", middleware.StaffMiddleware(), galleryController.Create)
+		imageGroup := galleryGroup.Group("/image")
+		imageGroup.POST("/create", middleware.StaffMiddleware(), galleryController.Create)
+		imageGroup.GET("/getall", galleryController.FindAll)
 	}
 }

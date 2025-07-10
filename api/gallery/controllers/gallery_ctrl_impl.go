@@ -20,7 +20,7 @@ func NewCompController(compServices services.CompServices) CompControllers {
 }
 
 func (h *CompControllersImpl) Create(ctx *gin.Context) {
-	var data dto.Gallery
+	var data dto.ImageGalleries
 	jsonErr := ctx.ShouldBindJSON(&data)
 	if jsonErr != nil {
 		ctx.JSON(http.StatusBadRequest, exceptions.NewException(http.StatusBadRequest, exceptions.ErrBadRequest))
@@ -36,5 +36,19 @@ func (h *CompControllersImpl) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, dto.Response{
 		Status:  http.StatusCreated,
 		Message: "success",
+	})
+}
+
+func (h *CompControllersImpl) FindAll(ctx *gin.Context) {
+	data, err := h.services.FindAll(ctx)
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, dto.Response{
+		Status:  http.StatusCreated,
+		Message: "success",
+		Body:    data,
 	})
 }

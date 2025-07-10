@@ -27,7 +27,7 @@ func NewComponentServices(compRepositories repositories.CompRepositories, db *go
 	}
 }
 
-func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.Gallery) *exceptions.Exception {
+func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.ImageGalleries) *exceptions.Exception {
 	validateErr := s.validate.Struct(data)
 	if validateErr != nil {
 		return exceptions.NewValidationException(validateErr)
@@ -36,7 +36,7 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.Gallery) *exception
 	tx := s.DB.Begin()
 	defer helpers.CommitOrRollback(tx)
 
-	input := mapper.MapGalleryInputToModel(data)
+	input := mapper.MapImageGalleriesInputToModel(data)
 	input.UUID = uuid.NewString()
 
 	err := s.repo.Create(ctx, tx, input)
@@ -45,4 +45,19 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.Gallery) *exception
 	}
 
 	return nil
+}
+
+func (s *CompServicesImpl) FindAll(ctx *gin.Context) ([]dto.ImageGalleriesResponse, *exceptions.Exception) {
+	output, err := s.repo.FindAll(ctx, s.DB)
+	if err != nil {
+		return nil, err
+	}
+
+	var response []dto.ImageGalleriesResponse
+	for _, v := range output {
+		result := mapper.MapImageGalleriesModelToOutput(v)
+		response = append(response, result)
+	}
+
+	return response, nil
 }
