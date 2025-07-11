@@ -61,3 +61,7 @@ func (s *CompServicesImpl) FindAll(ctx *gin.Context) ([]dto.ImageGalleriesRespon
 
 	return response, nil
 }
+
+func (s *CompServicesImpl) Delete(ctx *gin.Context, uuid string) *exceptions.Exception {
+	return s.repo.Delete(ctx, s.DB, uuid)
+}

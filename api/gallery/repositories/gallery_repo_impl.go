@@ -47,8 +47,8 @@ func (r *CompRepositoriesImpl) Update(ctx *gin.Context, tx *gorm.DB, data models
 	return nil
 }
 
-func (r *CompRepositoriesImpl) Delete(ctx *gin.Context, tx *gorm.DB, data models.ImageGalleries) *exceptions.Exception {
-	result := tx.Delete(&data)
+func (r *CompRepositoriesImpl) Delete(ctx *gin.Context, tx *gorm.DB, uuid string) *exceptions.Exception {
+	result := tx.Where("uuid = ?", uuid).Select("Images").Delete(&models.ImageGalleries{})
 	if result.Error != nil {
 		return exceptions.ParseGormError(tx, result.Error)
 	}

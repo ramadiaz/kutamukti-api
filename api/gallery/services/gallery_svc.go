@@ -10,4 +10,5 @@ import (
 type CompServices interface {
 	Create(ctx *gin.Context, data dto.ImageGalleries) *exceptions.Exception
 	FindAll(ctx *gin.Context) ([]dto.ImageGalleriesResponse, *exceptions.Exception)
+	Delete(ctx *gin.Context, uuid string) *exceptions.Exception
 }

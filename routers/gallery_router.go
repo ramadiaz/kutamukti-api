@@ -13,5 +13,6 @@ func GalleryRoutes(r *gin.RouterGroup, galleryController controllers.CompControl
 		imageGroup := galleryGroup.Group("/image")
 		imageGroup.POST("/create", middleware.StaffMiddleware(), galleryController.Create)
 		imageGroup.GET("/getall", galleryController.FindAll)
+		imageGroup.DELETE("/:uuid", galleryController.Delete)
 	}
 }

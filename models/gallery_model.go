@@ -1,6 +1,10 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type ImageGalleries struct {
 	ID    int64  `gorm:"primaryKey"`
@@ -11,7 +15,11 @@ type ImageGalleries struct {
 	UpdatedAt time.Time
 	DeletedAt *time.Time `gorm:"index"`
 
-	Images []Images `gorm:"foreignKey:GalleryUUID;references:UUID"`
+	Images []Images `gorm:"foreignKey:GalleryUUID;references:UUID;constraint:OnDelete:CASCADE"`
+}
+
+func (u *ImageGalleries) BeforeDelete(tx *gorm.DB) (err error) {
+	return tx.Model(&Images{}).Where("gallery_uuid = ?", u.UUID).Delete(&Images{}).Error
 }
 
 type Images struct {
