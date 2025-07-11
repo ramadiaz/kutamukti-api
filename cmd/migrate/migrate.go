@@ -15,6 +15,7 @@ func main() {
 		&models.UMKM{},
 		&models.ImageGalleries{},
 		&models.Images{},
+		&models.Videos{},
 		&models.Users{},
 		&models.Files{},
 		&models.News{},

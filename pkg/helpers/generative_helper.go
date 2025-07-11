@@ -36,3 +36,7 @@ func GenerateSecret(byteLength int) (string, *exceptions.Exception) {
 
 	return secret, nil
 }
+
+func GenerateYoutubeThumbnail(id string) string {
+	return "https://i.ytimg.com/vi/" + id + "/maxresdefault.jpg"
+}

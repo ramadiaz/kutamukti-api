@@ -3,6 +3,7 @@ package mapper
 import (
 	"kutamukti-api/api/gallery/dto"
 	"kutamukti-api/models"
+	"kutamukti-api/pkg/helpers"
 
 	"github.com/go-viper/mapstructure/v2"
 )
@@ -29,5 +30,8 @@ func MapVideosInputToModel(input dto.Videos) models.Videos {
 func MapVideosModelToOutput(input models.Videos) dto.VideosResponse {
 	var output dto.VideosResponse
 	mapstructure.Decode(input, &output)
+	youtubeID, _ := helpers.ExtractYouTubeID(input.YoutubeURL)
+	output.YoutubeID = youtubeID
+	output.ThumbnailURL = helpers.GenerateYoutubeThumbnail(youtubeID)
 	return output
 }

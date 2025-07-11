@@ -23,8 +23,10 @@ type ImagesResponse struct {
 }
 
 type VideosResponse struct {
-	UUID        string `json:"uuid"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	YoutubeURL  string `json:"youtube_url"`
+	UUID         string `json:"uuid"`
+	Title        string `json:"title"`
+	Description  string `json:"description"`
+	YoutubeURL   string `json:"youtube_url"`
+	YoutubeID    string `json:"youtube_id"`
+	ThumbnailURL string `json:"thumbnail_url"`
 }
