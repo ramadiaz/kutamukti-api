@@ -19,3 +19,15 @@ func MapImageGalleriesModelToOutput(input models.ImageGalleries) dto.ImageGaller
 	output.CreatedAt = input.CreatedAt
 	return output
 }
+
+func MapVideosInputToModel(input dto.Videos) models.Videos {
+	var output models.Videos
+	mapstructure.Decode(input, &output)
+	return output
+}
+
+func MapVideosModelToOutput(input models.Videos) dto.VideosResponse {
+	var output dto.VideosResponse
+	mapstructure.Decode(input, &output)
+	return output
+}

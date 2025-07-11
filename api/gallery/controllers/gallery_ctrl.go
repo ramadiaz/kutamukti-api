@@ -6,4 +6,6 @@ type CompControllers interface {
 	Create(ctx *gin.Context)
 	FindAll(ctx *gin.Context)
 	Delete(ctx *gin.Context)
+	CreateVideo(ctx *gin.Context)
+	FindAllVideo(ctx *gin.Context)
 }

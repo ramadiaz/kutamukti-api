@@ -70,3 +70,36 @@ func (h *CompControllersImpl) Delete(ctx *gin.Context) {
 		Message: "success",
 	})
 }
+
+func (h *CompControllersImpl) CreateVideo(ctx *gin.Context) {
+	var data dto.Videos
+	jsonErr := ctx.ShouldBindJSON(&data)
+	if jsonErr != nil {
+		ctx.JSON(http.StatusBadRequest, exceptions.NewException(http.StatusBadRequest, exceptions.ErrBadRequest))
+		return
+	}
+
+	err := h.services.CreateVideo(ctx, data)
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, dto.Response{
+		Status:  http.StatusCreated,
+		Message: "success",
+	})
+}
+
+func (h *CompControllersImpl) FindAllVideo(ctx *gin.Context) {
+	data, err := h.services.FindAllVideo(ctx)
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, dto.Response{
+		Status:  http.StatusOK,
+		Message: "success",
+		Body:    data,
+	})
+}

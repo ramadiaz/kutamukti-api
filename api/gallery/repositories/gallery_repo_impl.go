@@ -55,3 +55,23 @@ func (r *CompRepositoriesImpl) Delete(ctx *gin.Context, tx *gorm.DB, uuid string
 
 	return nil
 }
+
+func (r *CompRepositoriesImpl) CreateVideo(ctx *gin.Context, tx *gorm.DB, data models.Videos) *exceptions.Exception {
+	result := tx.Create(&data)
+	if result.Error != nil {
+		return exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return nil
+}
+
+func (r *CompRepositoriesImpl) FindAllVideo(ctx *gin.Context, tx *gorm.DB) ([]models.Videos, *exceptions.Exception) {
+	var output []models.Videos
+
+	result := tx.Find(&output)
+	if result.Error != nil {
+		return nil, exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return output, nil
+}

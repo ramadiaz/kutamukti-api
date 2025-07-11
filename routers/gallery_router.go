@@ -9,10 +9,15 @@ import (
 
 func GalleryRoutes(r *gin.RouterGroup, galleryController controllers.CompControllers) {
 	galleryGroup := r.Group("/gallery")
+	imageGroup := galleryGroup.Group("/image")
 	{
-		imageGroup := galleryGroup.Group("/image")
 		imageGroup.POST("/create", middleware.StaffMiddleware(), galleryController.Create)
 		imageGroup.GET("/getall", galleryController.FindAll)
-		imageGroup.DELETE("/:uuid", galleryController.Delete)
+		imageGroup.DELETE("/:uuid", middleware.StaffMiddleware(), galleryController.Delete)
+	}
+	videoGroup := galleryGroup.Group("/video")
+	{
+		videoGroup.POST("/create", middleware.StaffMiddleware(), galleryController.CreateVideo)
+		videoGroup.GET("/getall", galleryController.FindAllVideo)
 	}
 }

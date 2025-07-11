@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"kutamukti-api/api/gallery/dto"
 	"kutamukti-api/api/gallery/repositories"
 	"kutamukti-api/pkg/exceptions"
@@ -64,4 +65,43 @@ func (s *CompServicesImpl) FindAll(ctx *gin.Context) ([]dto.ImageGalleriesRespon
 
 func (s *CompServicesImpl) Delete(ctx *gin.Context, uuid string) *exceptions.Exception {
 	return s.repo.Delete(ctx, s.DB, uuid)
+}
+
+func (s *CompServicesImpl) CreateVideo(ctx *gin.Context, data dto.Videos) *exceptions.Exception {
+	validateErr := s.validate.Struct(data)
+	if validateErr != nil {
+		return exceptions.NewValidationException(validateErr)
+	}
+
+	if !helpers.IsValidYouTubeURL(data.YoutubeURL) {
+		return exceptions.NewValidationException(fmt.Errorf("Youtube URL is invalid"))
+	}
+
+	tx := s.DB.Begin()
+	defer helpers.CommitOrRollback(tx)
+
+	input := mapper.MapVideosInputToModel(data)
+	input.UUID = uuid.NewString()
+
+	err := s.repo.CreateVideo(ctx, tx, input)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *CompServicesImpl) FindAllVideo(ctx *gin.Context) ([]dto.VideosResponse, *exceptions.Exception) {
+	output, err := s.repo.FindAllVideo(ctx, s.DB)
+	if err != nil {
+		return nil, err
+	}
+
+	var response []dto.VideosResponse
+	for _, v := range output {
+		result := mapper.MapVideosModelToOutput(v)
+		response = append(response, result)
+	}
+
+	return response, nil
 }

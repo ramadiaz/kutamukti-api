@@ -21,3 +21,10 @@ type ImagesResponse struct {
 	ImageURL    string `json:"image_url"`
 	Description string `json:"description"`
 }
+
+type VideosResponse struct {
+	UUID        string `json:"uuid"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	YoutubeURL  string `json:"youtube_url"`
+}

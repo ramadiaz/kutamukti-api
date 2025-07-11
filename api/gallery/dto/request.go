@@ -10,4 +10,8 @@ type Images struct {
 	Description string `json:"description" validate:"required"`
 }
 
-
+type Videos struct {
+	Title       string `json:"title" validate:"required"`
+	Description string `json:"description" validate:"required"`
+	YoutubeURL  string `json:"youtube_url" validate:"required"`
+}
