@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -31,6 +32,7 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.UMKM) *exceptions.E
 		return exceptions.NewValidationException(validateErr)
 	}
 	input := mapper.MapUMKMInputToModel(data)
+	input.UUID = uuid.NewString()
 	err := s.repo.Create(ctx, s.DB, input)
 	if err != nil {
 		return err
