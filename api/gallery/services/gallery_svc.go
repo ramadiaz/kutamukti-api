@@ -13,4 +13,5 @@ type CompServices interface {
 	Delete(ctx *gin.Context, uuid string) *exceptions.Exception
 	CreateVideo(ctx *gin.Context, data dto.Videos) *exceptions.Exception
 	FindAllVideo(ctx *gin.Context) ([]dto.VideosResponse, *exceptions.Exception)
+	FindVideoByUUID(ctx *gin.Context, uuid string) (*dto.VideosResponse, *exceptions.Exception)
 }

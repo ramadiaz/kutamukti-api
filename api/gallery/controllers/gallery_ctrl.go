@@ -8,4 +8,5 @@ type CompControllers interface {
 	Delete(ctx *gin.Context)
 	CreateVideo(ctx *gin.Context)
 	FindAllVideo(ctx *gin.Context)
+	FindVideoByUUID(ctx *gin.Context)
 }

@@ -18,6 +18,7 @@ func GalleryRoutes(r *gin.RouterGroup, galleryController controllers.CompControl
 	videoGroup := galleryGroup.Group("/video")
 	{
 		videoGroup.POST("/create", middleware.StaffMiddleware(), galleryController.CreateVideo)
+		videoGroup.GET("/:uuid", galleryController.FindVideoByUUID)
 		videoGroup.GET("/getall", galleryController.FindAllVideo)
 	}
 }

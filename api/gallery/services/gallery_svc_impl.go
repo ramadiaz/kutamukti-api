@@ -105,3 +105,13 @@ func (s *CompServicesImpl) FindAllVideo(ctx *gin.Context) ([]dto.VideosResponse,
 
 	return response, nil
 }
+
+func (s *CompServicesImpl) FindVideoByUUID(ctx *gin.Context, uuid string) (*dto.VideosResponse, *exceptions.Exception) {
+	output, err := s.repo.FindVideoByUUID(ctx, s.DB, uuid)
+	if err != nil {
+		return nil, err
+	}
+	response := mapper.MapVideosModelToOutput(*output)
+
+	return &response, nil
+}

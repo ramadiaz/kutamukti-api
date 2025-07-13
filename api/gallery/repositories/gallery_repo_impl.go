@@ -75,3 +75,14 @@ func (r *CompRepositoriesImpl) FindAllVideo(ctx *gin.Context, tx *gorm.DB) ([]mo
 
 	return output, nil
 }
+
+func (r *CompRepositoriesImpl) FindVideoByUUID(ctx *gin.Context, tx *gorm.DB, uuid string) (*models.Videos, *exceptions.Exception) {
+	var output models.Videos
+
+	result := tx.Where("uuid = ?", uuid).First(&output)
+	if result.Error != nil {
+		return nil, exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return &output, nil
+}
