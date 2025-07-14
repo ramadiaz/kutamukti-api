@@ -40,3 +40,25 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.UMKM) *exceptions.E
 
 	return nil
 }
+
+func (s *CompServicesImpl) FindAll(ctx *gin.Context) (*[]dto.UMKMResponse, *exceptions.Exception) {
+	output, err := s.repo.FindAll(ctx, s.DB)
+	if err != nil {
+		return nil, err
+	}
+	var response []dto.UMKMResponse
+	for _, v := range output {
+		response = append(response, mapper.MapUMKMModelToOutput(v))
+	}
+	return &response, nil
+}
+
+func (s *CompServicesImpl) FindByUUID(ctx *gin.Context, uuid string) (*dto.UMKMResponse, *exceptions.Exception) {
+	output, err := s.repo.FindByUUID(ctx, s.DB, uuid)
+	if err != nil {
+		return nil, err
+	}
+	response := mapper.MapUMKMModelToOutput(*output)
+
+	return &response, nil
+}

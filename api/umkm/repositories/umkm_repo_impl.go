@@ -35,6 +35,17 @@ func (r *CompRepositoriesImpl) FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.
 	return output, nil
 }
 
+func (r *CompRepositoriesImpl) FindByUUID(ctx *gin.Context, tx *gorm.DB, uuid string) (*models.UMKM, *exceptions.Exception) {
+	var output models.UMKM
+
+	result := tx.Where("uuid = ?", uuid).First(&output)
+	if result.Error != nil {
+		return nil, exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return &output, nil
+}
+
 func (r *CompRepositoriesImpl) Update(ctx *gin.Context, tx *gorm.DB, data models.UMKM) *exceptions.Exception {
 	result := tx.Save(&data)
 	if result.Error != nil {
