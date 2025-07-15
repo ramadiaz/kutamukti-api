@@ -13,6 +13,8 @@ func main() {
 		&models.Schedules{},
 		&models.Announcements{},
 		&models.UMKM{},
+		&models.UMKMProduct{},
+		&models.UMKMImage{},
 		&models.ImageGalleries{},
 		&models.Images{},
 		&models.Videos{},

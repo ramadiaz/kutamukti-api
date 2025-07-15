@@ -4,6 +4,8 @@ import (
 	"kutamukti-api/models"
 	"kutamukti-api/pkg/exceptions"
 
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -62,4 +64,35 @@ func (r *CompRepositoriesImpl) Delete(ctx *gin.Context, tx *gorm.DB, data models
 	}
 
 	return nil
+}
+func (r *CompRepositoriesImpl) CreateProduct(ctx *gin.Context, tx *gorm.DB, data models.UMKMProduct) *exceptions.Exception {
+	result := tx.Create(&data)
+	if result.Error != nil {
+		return exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return nil
+}
+
+func (r *CompRepositoriesImpl) FindAllProduct(ctx *gin.Context, tx *gorm.DB) ([]models.UMKMProduct, *exceptions.Exception) {
+	var output []models.UMKMProduct
+	result := tx.Preload("Images").Find(&output)
+	if result.Error != nil {
+		return nil, exceptions.ParseGormError(tx, result.Error)
+	}
+	return output, nil
+}
+
+func (r *CompRepositoriesImpl) FindProductByKeyword(ctx *gin.Context, tx *gorm.DB, keyword string) ([]models.UMKMProduct, *exceptions.Exception) {
+	var output []models.UMKMProduct
+	lowerKeyword := "%" + strings.ToLower(keyword) + "%"
+	query := tx.Preload("Images").Where(
+		"LOWER(name) LIKE ? OR LOWER(description) LIKE ? OR LOWER(variation) LIKE ? OR CAST(price AS CHAR) LIKE ?",
+		lowerKeyword, lowerKeyword, lowerKeyword, lowerKeyword,
+	)
+	result := query.Find(&output)
+	if result.Error != nil {
+		return nil, exceptions.ParseGormError(tx, result.Error)
+	}
+	return output, nil
 }

@@ -4,6 +4,7 @@ import (
 	"kutamukti-api/api/umkm/dto"
 	"kutamukti-api/api/umkm/repositories"
 	"kutamukti-api/pkg/exceptions"
+	"kutamukti-api/pkg/helpers"
 	"kutamukti-api/pkg/mapper"
 
 	"github.com/gin-gonic/gin"
@@ -60,5 +61,47 @@ func (s *CompServicesImpl) FindByUUID(ctx *gin.Context, uuid string) (*dto.UMKMR
 	}
 	response := mapper.MapUMKMModelToOutput(*output)
 
+	return &response, nil
+}
+
+func (s *CompServicesImpl) CreateProduct(ctx *gin.Context, data dto.UMKMProduct) *exceptions.Exception {
+	validateErr := s.validate.Struct(data)
+	if validateErr != nil {
+		return exceptions.NewValidationException(validateErr)
+	}
+	input := mapper.MapUMKMProductInputToModel(data)
+	input.UUID = uuid.NewString()
+
+	tx := s.DB.Begin()
+	defer helpers.CommitOrRollback(tx)
+
+	err := s.repo.CreateProduct(ctx, tx, input)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *CompServicesImpl) FindAllProduct(ctx *gin.Context) (*[]dto.UMKMProductResponse, *exceptions.Exception) {
+	output, err := s.repo.FindAllProduct(ctx, s.DB)
+	if err != nil {
+		return nil, err
+	}
+	var response []dto.UMKMProductResponse
+	for _, v := range output {
+		response = append(response, mapper.MapUMKMProductModelToOutput(v))
+	}
+	return &response, nil
+}
+
+func (s *CompServicesImpl) FindProductByKeyword(ctx *gin.Context, keyword string) (*[]dto.UMKMProductResponse, *exceptions.Exception) {
+	output, err := s.repo.FindProductByKeyword(ctx, s.DB, keyword)
+	if err != nil {
+		return nil, err
+	}
+	var response []dto.UMKMProductResponse
+	for _, v := range output {
+		response = append(response, mapper.MapUMKMProductModelToOutput(v))
+	}
 	return &response, nil
 }

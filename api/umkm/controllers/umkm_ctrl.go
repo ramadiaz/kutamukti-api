@@ -6,4 +6,7 @@ type CompControllers interface {
 	Create(ctx *gin.Context)
 	FindAll(ctx *gin.Context)
 	FindByUUID(ctx *gin.Context)
+	CreateProduct(ctx *gin.Context)
+	FindAllProduct(ctx *gin.Context)
+	FindProductByKeyword(ctx *gin.Context)
 }

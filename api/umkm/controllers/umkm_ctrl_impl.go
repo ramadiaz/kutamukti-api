@@ -70,3 +70,54 @@ func (h *CompControllersImpl) FindByUUID(ctx *gin.Context) {
 		Body:    data,
 	})
 }
+
+func (h *CompControllersImpl) CreateProduct(ctx *gin.Context) {
+	var data dto.UMKMProduct
+	jsonErr := ctx.ShouldBindJSON(&data)
+	if jsonErr != nil {
+		ctx.JSON(http.StatusBadRequest, exceptions.NewException(http.StatusBadRequest, exceptions.ErrBadRequest))
+		return
+	}
+
+	err := h.services.CreateProduct(ctx, data)
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, dto.Response{
+		Status:  http.StatusCreated,
+		Message: "success",
+	})
+}
+
+func (h *CompControllersImpl) FindAllProduct(ctx *gin.Context) {
+	data, err := h.services.FindAllProduct(ctx)
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, dto.Response{
+		Status:  http.StatusOK,
+		Message: "success",
+		Body:    data,
+	})
+}
+
+func (h *CompControllersImpl) FindProductByKeyword(ctx *gin.Context) {
+	keyword := ctx.Query("keyword")
+	if keyword == "" {
+		ctx.JSON(http.StatusBadRequest, exceptions.NewException(http.StatusBadRequest, exceptions.ErrBadRequest))
+		return
+	}
+	data, err := h.services.FindProductByKeyword(ctx, keyword)
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, dto.Response{
+		Status:  http.StatusOK,
+		Message: "success",
+		Body:    data,
+	})
+}

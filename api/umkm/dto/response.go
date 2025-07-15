@@ -17,3 +17,17 @@ type UMKMResponse struct {
 	OpenAt      int     `json:"open_at" validate:"required"`
 	CloseAt     int     `json:"close_at" validate:"required"`
 }
+
+type UMKMProductResponse struct {
+	UUID        string              `json:"uuid"`
+	UMKMUUID    string              `json:"umkm_uuid"`
+	Name        string              `json:"name"`
+	Description string              `json:"description"`
+	Variation   string              `json:"variation"`
+	Price       int                 `json:"price"`
+	Images      []UMKMImageResponse `json:"images"`
+}
+
+type UMKMImageResponse struct {
+	ImageURL string `json:"image_url"`
+}
