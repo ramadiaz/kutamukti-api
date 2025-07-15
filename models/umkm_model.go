@@ -40,6 +40,8 @@ type UMKMProduct struct {
 	UpdatedAt   time.Time  `gorm:"not null"`
 	DeletedAt   *time.Time `gorm:"index"`
 
+	UMKM UMKM `gorm:"foreignKey:UMKMUUID;references:UUID"`
+
 	Images []UMKMImage `gorm:"foreignKey:UMKMProductUUID;references:UUID;constraint:OnDelete:CASCADE"`
 }
 

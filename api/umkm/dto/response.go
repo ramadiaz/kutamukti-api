@@ -28,6 +28,8 @@ type UMKMProductResponse struct {
 	Variation   string              `json:"variation"`
 	Price       int                 `json:"price"`
 	Images      []UMKMImageResponse `json:"images"`
+
+	UMKM UMKMResponse `json:"umkm,omitempty"`
 }
 
 type UMKMImageResponse struct {

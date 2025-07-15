@@ -106,10 +106,7 @@ func (h *CompControllersImpl) FindAllProduct(ctx *gin.Context) {
 
 func (h *CompControllersImpl) FindProductByKeyword(ctx *gin.Context) {
 	keyword := ctx.Query("keyword")
-	if keyword == "" {
-		ctx.JSON(http.StatusBadRequest, exceptions.NewException(http.StatusBadRequest, exceptions.ErrBadRequest))
-		return
-	}
+	
 	data, err := h.services.FindProductByKeyword(ctx, keyword)
 	if err != nil {
 		ctx.JSON(err.Status, err)
