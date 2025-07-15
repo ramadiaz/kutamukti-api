@@ -100,8 +100,24 @@ func (s *CompServicesImpl) FindProductByKeyword(ctx *gin.Context, keyword string
 		return nil, err
 	}
 	var response []dto.UMKMProductResponse
-	for _, v := range output {
+	for _, v := range *output {
 		response = append(response, mapper.MapUMKMProductModelToOutput(v))
 	}
 	return &response, nil
+}
+
+func (s *CompServicesImpl) FindProductByUMKMUUID(ctx *gin.Context, uuid string) (*[]dto.UMKMProductResponse, *exceptions.Exception) {
+	output, err := s.repo.FindProductByUMKMUUID(ctx, s.DB, uuid)
+	if err != nil {
+		return nil, err
+	}
+	var response []dto.UMKMProductResponse
+	for _, v := range *output {
+		response = append(response, mapper.MapUMKMProductModelToOutput(v))
+	}
+	return &response, nil
+}
+
+func (s *CompServicesImpl) DeleteProduct(ctx *gin.Context, uuid string) *exceptions.Exception {
+	return s.repo.DeleteProduct(ctx, s.DB, uuid)
 }

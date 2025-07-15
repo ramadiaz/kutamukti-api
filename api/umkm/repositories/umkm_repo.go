@@ -17,5 +17,7 @@ type CompRepositories interface {
 
 	CreateProduct(ctx *gin.Context, tx *gorm.DB, data models.UMKMProduct) *exceptions.Exception
 	FindAllProduct(ctx *gin.Context, tx *gorm.DB) ([]models.UMKMProduct, *exceptions.Exception)
-	FindProductByKeyword(ctx *gin.Context, tx *gorm.DB, keyword string) ([]models.UMKMProduct, *exceptions.Exception)
+	FindProductByKeyword(ctx *gin.Context, tx *gorm.DB, keyword string) (*[]models.UMKMProduct, *exceptions.Exception)
+	FindProductByUMKMUUID(ctx *gin.Context, tx *gorm.DB, uuid string) (*[]models.UMKMProduct, *exceptions.Exception)
+	DeleteProduct(ctx *gin.Context, tx *gorm.DB, uuid string) *exceptions.Exception
 }

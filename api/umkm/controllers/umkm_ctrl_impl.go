@@ -121,3 +121,38 @@ func (h *CompControllersImpl) FindProductByKeyword(ctx *gin.Context) {
 		Body:    data,
 	})
 }
+
+func (h *CompControllersImpl) FindProductByUMKMUUID(ctx *gin.Context) {
+	uuid := ctx.Param("uuid")
+	if uuid == "" {
+		ctx.JSON(http.StatusBadRequest, exceptions.NewException(http.StatusBadRequest, exceptions.ErrBadRequest))
+		return
+	}
+	data, err := h.services.FindProductByUMKMUUID(ctx, uuid)
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, dto.Response{
+		Status:  http.StatusOK,
+		Message: "success",
+		Body:    data,
+	})
+}
+
+func (h *CompControllersImpl) DeleteProduct(ctx *gin.Context) {
+	uuid := ctx.Param("uuid")
+	if uuid == "" {
+		ctx.JSON(http.StatusBadRequest, exceptions.NewException(http.StatusBadRequest, exceptions.ErrBadRequest))
+		return
+	}
+	err := h.services.DeleteProduct(ctx, uuid)
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, dto.Response{
+		Status:  http.StatusOK,
+		Message: "success",
+	})
+}

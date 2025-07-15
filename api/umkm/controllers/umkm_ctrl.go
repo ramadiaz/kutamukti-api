@@ -9,4 +9,6 @@ type CompControllers interface {
 	CreateProduct(ctx *gin.Context)
 	FindAllProduct(ctx *gin.Context)
 	FindProductByKeyword(ctx *gin.Context)
+	FindProductByUMKMUUID(ctx *gin.Context)
+	DeleteProduct(ctx *gin.Context)
 }

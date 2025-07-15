@@ -40,7 +40,7 @@ func (r *CompRepositoriesImpl) FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.
 func (r *CompRepositoriesImpl) FindByUUID(ctx *gin.Context, tx *gorm.DB, uuid string) (*models.UMKM, *exceptions.Exception) {
 	var output models.UMKM
 
-	result := tx.Where("uuid = ?", uuid).First(&output)
+	result := tx.Preload("Products").Preload("Products.Images").Where("uuid = ?", uuid).First(&output)
 	if result.Error != nil {
 		return nil, exceptions.ParseGormError(tx, result.Error)
 	}
@@ -83,7 +83,7 @@ func (r *CompRepositoriesImpl) FindAllProduct(ctx *gin.Context, tx *gorm.DB) ([]
 	return output, nil
 }
 
-func (r *CompRepositoriesImpl) FindProductByKeyword(ctx *gin.Context, tx *gorm.DB, keyword string) ([]models.UMKMProduct, *exceptions.Exception) {
+func (r *CompRepositoriesImpl) FindProductByKeyword(ctx *gin.Context, tx *gorm.DB, keyword string) (*[]models.UMKMProduct, *exceptions.Exception) {
 	var output []models.UMKMProduct
 	lowerKeyword := "%" + strings.ToLower(keyword) + "%"
 	query := tx.Preload("Images").Where(
@@ -94,5 +94,24 @@ func (r *CompRepositoriesImpl) FindProductByKeyword(ctx *gin.Context, tx *gorm.D
 	if result.Error != nil {
 		return nil, exceptions.ParseGormError(tx, result.Error)
 	}
-	return output, nil
+	return &output, nil
+}
+
+func (r *CompRepositoriesImpl) FindProductByUMKMUUID(ctx *gin.Context, tx *gorm.DB, uuid string) (*[]models.UMKMProduct, *exceptions.Exception) {
+	var output []models.UMKMProduct
+	result := tx.Where("umkm_uuid = ?", uuid).Find(&output)
+	if result.Error != nil {
+		return nil, exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return &output, nil
+}
+
+func (r *CompRepositoriesImpl) DeleteProduct(ctx *gin.Context, tx *gorm.DB, uuid string) *exceptions.Exception {
+	result := tx.Where("uuid = ?", uuid).Delete(&models.UMKMProduct{})
+	if result.Error != nil {
+		return exceptions.ParseGormError(tx, result.Error)
+	}
+
+	return nil
 }

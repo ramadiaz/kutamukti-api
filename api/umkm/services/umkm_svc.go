@@ -14,4 +14,6 @@ type CompServices interface {
 	CreateProduct(ctx *gin.Context, data dto.UMKMProduct) *exceptions.Exception
 	FindAllProduct(ctx *gin.Context) (*[]dto.UMKMProductResponse, *exceptions.Exception)
 	FindProductByKeyword(ctx *gin.Context, keyword string) (*[]dto.UMKMProductResponse, *exceptions.Exception)
+	FindProductByUMKMUUID(ctx *gin.Context, uuid string) (*[]dto.UMKMProductResponse, *exceptions.Exception)
+	DeleteProduct(ctx *gin.Context, uuid string) *exceptions.Exception
 }

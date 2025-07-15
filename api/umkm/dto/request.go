@@ -7,8 +7,8 @@ type UMKM struct {
 	Location    string  `json:"location" validate:"required"`
 	Langitude   float64 `json:"langitude" validate:"required"`
 	Latitude    float64 `json:"latitude" validate:"required"`
-	OpenAt      int     `json:"open_at" validate:"required,gte=0,lte=24"`
-	CloseAt     int     `json:"close_at" validate:"required,gte=0,lte=24"`
+	OpenAt      int     `json:"open_at" validate:"gte=0,lte=24"`
+	CloseAt     int     `json:"close_at" validate:"gte=0,lte=24"`
 }
 
 type UMKMProduct struct {

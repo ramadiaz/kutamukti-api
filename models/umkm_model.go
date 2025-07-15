@@ -24,7 +24,7 @@ type UMKM struct {
 	UpdatedAt time.Time  `gorm:"not null"`
 	DeletedAt *time.Time `gorm:"index"`
 
-	Products UMKMProduct `gorm:"foreignKey:UMKMUUID;references:UUID;constraint:OnDelete:CASCADE"`
+	Products []UMKMProduct `gorm:"foreignKey:UMKMUUID;references:UUID;constraint:OnDelete:CASCADE"`
 }
 
 type UMKMProduct struct {

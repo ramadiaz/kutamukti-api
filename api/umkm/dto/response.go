@@ -16,6 +16,8 @@ type UMKMResponse struct {
 	Latitude    float64 `json:"latitude" validate:"required"`
 	OpenAt      int     `json:"open_at" validate:"required"`
 	CloseAt     int     `json:"close_at" validate:"required"`
+
+	Products []UMKMProductResponse `json:"products,omitempty"`
 }
 
 type UMKMProductResponse struct {
