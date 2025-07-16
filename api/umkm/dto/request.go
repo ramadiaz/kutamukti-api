@@ -9,6 +9,8 @@ type UMKM struct {
 	Latitude    float64 `json:"latitude" validate:"required"`
 	OpenAt      int     `json:"open_at" validate:"gte=0,lte=24"`
 	CloseAt     int     `json:"close_at" validate:"gte=0,lte=24"`
+	Owner       string  `json:"owner" validate:"required"`
+	Contact     string  `json:"contact" validate:"required"`
 }
 
 type UMKMProduct struct {

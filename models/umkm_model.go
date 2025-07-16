@@ -19,6 +19,8 @@ type UMKM struct {
 	Latitude    float64 `gorm:"not null"`
 	OpenAt      int     `gorm:"not null"`
 	CloseAt     int     `gorm:"not null"`
+	Owner       string  `gorm:"not null"`
+	Contact     string  `gorm:"not null"`
 
 	CreatedAt time.Time  `gorm:"not null"`
 	UpdatedAt time.Time  `gorm:"not null"`
