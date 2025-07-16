@@ -32,9 +32,17 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.UMKM) *exceptions.E
 	if validateErr != nil {
 		return exceptions.NewValidationException(validateErr)
 	}
+
+	phoneNumber, err := helpers.NormalizePhoneNumber(data.Contact)
+	if err != nil {
+		return err
+	}
+
+	data.Contact = phoneNumber
+
 	input := mapper.MapUMKMInputToModel(data)
 	input.UUID = uuid.NewString()
-	err := s.repo.Create(ctx, s.DB, input)
+	err = s.repo.Create(ctx, s.DB, input)
 	if err != nil {
 		return err
 	}
