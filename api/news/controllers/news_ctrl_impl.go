@@ -5,9 +5,19 @@ import (
 	"kutamukti-api/api/news/services"
 	"kutamukti-api/pkg/exceptions"
 	"net/http"
+	"sync"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
+
+var newsFindAllCache struct {
+	sync.Mutex
+	data *[]dto.NewsResponse
+	time time.Time
+}
+
+const newsFindAllCacheDuration = 10 * time.Minute
 
 type CompControllersImpl struct {
 	services services.CompServices
@@ -42,11 +52,30 @@ func (h *CompControllersImpl) Create(ctx *gin.Context) {
 }
 
 func (h *CompControllersImpl) FindAll(ctx *gin.Context) {
+	newsFindAllCache.Lock()
+	if newsFindAllCache.data != nil && time.Since(newsFindAllCache.time) < newsFindAllCacheDuration {
+		data := newsFindAllCache.data
+		newsFindAllCache.Unlock()
+		ctx.JSON(http.StatusOK, dto.Response{
+			Status:  http.StatusOK,
+			Message: "success (cached)",
+			Body:    data,
+		})
+		return
+	}
+	newsFindAllCache.Unlock()
+
 	data, err := h.services.FindAll(ctx)
 	if err != nil {
 		ctx.JSON(err.Status, err)
 		return
 	}
+
+	newsFindAllCache.Lock()
+	newsFindAllCache.data = data
+	newsFindAllCache.time = time.Now()
+	newsFindAllCache.Unlock()
+
 	ctx.JSON(http.StatusOK, dto.Response{
 		Status:  http.StatusOK,
 		Message: "success",

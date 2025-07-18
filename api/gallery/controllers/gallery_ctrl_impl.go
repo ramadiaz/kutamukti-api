@@ -5,9 +5,27 @@ import (
 	"kutamukti-api/api/gallery/services"
 	"kutamukti-api/pkg/exceptions"
 	"net/http"
+	"sync"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
+
+var galleryFindAllCache struct {
+	sync.Mutex
+	data *[]dto.ImageGalleriesResponse
+	time time.Time
+}
+
+const galleryFindAllCacheDuration = 10 * time.Minute
+
+var galleryFindAllVideoCache struct {
+	sync.Mutex
+	data *[]dto.VideosResponse
+	time time.Time
+}
+
+const galleryFindAllVideoCacheDuration = 10 * time.Minute
 
 type CompControllersImpl struct {
 	services services.CompServices
@@ -40,14 +58,32 @@ func (h *CompControllersImpl) Create(ctx *gin.Context) {
 }
 
 func (h *CompControllersImpl) FindAll(ctx *gin.Context) {
+	galleryFindAllCache.Lock()
+	if galleryFindAllCache.data != nil && time.Since(galleryFindAllCache.time) < galleryFindAllCacheDuration {
+		data := galleryFindAllCache.data
+		galleryFindAllCache.Unlock()
+		ctx.JSON(http.StatusOK, dto.Response{
+			Status:  http.StatusOK,
+			Message: "success (cached)",
+			Body:    data,
+		})
+		return
+	}
+	galleryFindAllCache.Unlock()
+
 	data, err := h.services.FindAll(ctx)
 	if err != nil {
 		ctx.JSON(err.Status, err)
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, dto.Response{
-		Status:  http.StatusCreated,
+	galleryFindAllCache.Lock()
+	galleryFindAllCache.data = &data
+	galleryFindAllCache.time = time.Now()
+	galleryFindAllCache.Unlock()
+
+	ctx.JSON(http.StatusOK, dto.Response{
+		Status:  http.StatusOK,
 		Message: "success",
 		Body:    data,
 	})
@@ -92,11 +128,30 @@ func (h *CompControllersImpl) CreateVideo(ctx *gin.Context) {
 }
 
 func (h *CompControllersImpl) FindAllVideo(ctx *gin.Context) {
+	galleryFindAllVideoCache.Lock()
+	if galleryFindAllVideoCache.data != nil && time.Since(galleryFindAllVideoCache.time) < galleryFindAllVideoCacheDuration {
+		data := galleryFindAllVideoCache.data
+		galleryFindAllVideoCache.Unlock()
+		ctx.JSON(http.StatusOK, dto.Response{
+			Status:  http.StatusOK,
+			Message: "success (cached)",
+			Body:    data,
+		})
+		return
+	}
+	galleryFindAllVideoCache.Unlock()
+
 	data, err := h.services.FindAllVideo(ctx)
 	if err != nil {
 		ctx.JSON(err.Status, err)
 		return
 	}
+
+	galleryFindAllVideoCache.Lock()
+	galleryFindAllVideoCache.data = &data
+	galleryFindAllVideoCache.time = time.Now()
+	galleryFindAllVideoCache.Unlock()
+
 	ctx.JSON(http.StatusOK, dto.Response{
 		Status:  http.StatusOK,
 		Message: "success",

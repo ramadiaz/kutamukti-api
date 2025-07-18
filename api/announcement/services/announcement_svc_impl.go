@@ -63,3 +63,15 @@ func (s *CompServicesImpl) Create(ctx *gin.Context, data dto.Announcement) *exce
 
 	return nil
 }
+
+func (s *CompServicesImpl) FindAll(ctx *gin.Context) (*[]dto.AnnouncementResponse, *exceptions.Exception) {
+	output, err := s.repo.FindAll(ctx, s.DB)
+	if err != nil {
+		return nil, err
+	}
+	var response []dto.AnnouncementResponse
+	for _, v := range output {
+		response = append(response, mapper.MapAnnouncementModelToOutput(v))
+	}
+	return &response, nil
+}
