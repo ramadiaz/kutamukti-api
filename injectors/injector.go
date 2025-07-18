@@ -33,14 +33,18 @@ import (
 	storageControllers "kutamukti-api/api/storages/controllers"
 	storageRepositories "kutamukti-api/api/storages/repositories"
 	storageServices "kutamukti-api/api/storages/services"
-	
+
 	newsControllers "kutamukti-api/api/news/controllers"
 	newsRepositories "kutamukti-api/api/news/repositories"
 	newsServices "kutamukti-api/api/news/services"
 
-	"google.golang.org/api/drive/v3"
+	analyticsControllers "kutamukti-api/api/analytics/controllers"
+	analyticsRepositories "kutamukti-api/api/analytics/repositories"
+	analyticsServices "kutamukti-api/api/analytics/services"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/google/wire"
+	"google.golang.org/api/drive/v3"
 	"gorm.io/gorm"
 )
 
@@ -92,6 +96,12 @@ var newsFeatureSet = wire.NewSet(
 	newsControllers.NewCompController,
 )
 
+var analyticsFeatureSet = wire.NewSet(
+	analyticsRepositories.NewComponentRepository,
+	analyticsServices.NewComponentServices,
+	analyticsControllers.NewCompController,
+)
+
 func InitializeUserController(db *gorm.DB, validate *validator.Validate) userControllers.CompControllers {
 	wire.Build(userFeatureSet)
 	return nil
@@ -129,5 +139,10 @@ func InitializeStorageController(db *gorm.DB, validate *validator.Validate, driv
 
 func InitializeNewsController(db *gorm.DB, validate *validator.Validate) newsControllers.CompControllers {
 	wire.Build(newsFeatureSet)
+	return nil
+}
+
+func InitializeAnalyticsController(db *gorm.DB) analyticsControllers.CompControllers {
+	wire.Build(analyticsFeatureSet)
 	return nil
 }

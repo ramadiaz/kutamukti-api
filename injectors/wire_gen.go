@@ -11,6 +11,9 @@ import (
 	"github.com/google/wire"
 	"google.golang.org/api/drive/v3"
 	"gorm.io/gorm"
+	controllers9 "kutamukti-api/api/analytics/controllers"
+	repositories9 "kutamukti-api/api/analytics/repositories"
+	services9 "kutamukti-api/api/analytics/services"
 	controllers4 "kutamukti-api/api/announcement/controllers"
 	repositories4 "kutamukti-api/api/announcement/repositories"
 	services4 "kutamukti-api/api/announcement/services"
@@ -95,6 +98,13 @@ func InitializeNewsController(db *gorm.DB, validate *validator.Validate) control
 	return compControllers
 }
 
+func InitializeAnalyticsController(db *gorm.DB) controllers9.CompControllers {
+	compRepositories := repositories9.NewComponentRepository(db)
+	compServices := services9.NewComponentServices(compRepositories)
+	compControllers := controllers9.NewCompController(compServices)
+	return compControllers
+}
+
 // injector.go:
 
 var userFeatureSet = wire.NewSet(repositories.NewComponentRepository, services.NewComponentServices, controllers.NewCompController)
@@ -112,3 +122,5 @@ var galleryFeatureSet = wire.NewSet(repositories6.NewComponentRepository, servic
 var storageFeatureSet = wire.NewSet(repositories7.NewComponentRepository, services7.NewComponentServices, controllers7.NewCompController)
 
 var newsFeatureSet = wire.NewSet(repositories8.NewComponentRepository, services8.NewComponentServices, controllers8.NewCompController)
+
+var analyticsFeatureSet = wire.NewSet(repositories9.NewComponentRepository, services9.NewComponentServices, controllers9.NewCompController)

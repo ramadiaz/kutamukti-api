@@ -26,6 +26,7 @@ func CompRouters(r *gin.RouterGroup, db *gorm.DB, validate *validator.Validate, 
 	galleryController := injectors.InitializeGalleryController(db, validate)
 	storageController := injectors.InitializeStorageController(db, validate, drive)
 	newsController := injectors.InitializeNewsController(db, validate)
+	analyticsController := injectors.InitializeAnalyticsController(db)
 
 	UserRoutes(r, userController)
 	ComplaintRoutes(r, complaintController)
@@ -35,4 +36,6 @@ func CompRouters(r *gin.RouterGroup, db *gorm.DB, validate *validator.Validate, 
 	GalleryRoutes(r, galleryController)
 	StorageRoutes(r, storageController)
 	NewsRoutes(r, newsController)
+
+	r.GET("/analytics", analyticsController.GetAnalyticsData)
 }
