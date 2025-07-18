@@ -30,8 +30,8 @@ func (r *CompRepositoriesImpl) FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.
 	result := tx.
 		Preload("Images").
 		Preload("User").
-		Find(&output).
-		Order("created_at DESC")
+		Order("created_at DESC").
+		Find(&output)
 	if result.Error != nil {
 		return nil, exceptions.ParseGormError(tx, result.Error)
 	}
