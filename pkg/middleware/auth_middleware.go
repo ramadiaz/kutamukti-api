@@ -109,3 +109,44 @@ func AdminMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func OptionalAuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		secret := os.Getenv("JWT_SECRET")
+		var secretKey = []byte(secret)
+
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.Next()
+			return
+		}
+
+		authHeaderParts := strings.Split(authHeader, " ")
+		if len(authHeaderParts) != 2 || authHeaderParts[0] != "Bearer" {
+			c.Next()
+			return
+		}
+
+		tokenString := authHeaderParts[1]
+		claims := jwt.MapClaims{}
+		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+			return secretKey, nil
+		})
+
+		if err != nil || !token.Valid {
+			c.Next()
+			return
+		}
+
+		user := dto.UserResponse{
+			UUID:     claims["uuid"].(string),
+			Email:    claims["email"].(string),
+			Name:     claims["name"].(string),
+			Username: claims["username"].(string),
+			Role:     dto.Roles(claims["role"].(string)),
+		}
+
+		c.Set("user", user)
+		c.Next()
+	}
+}

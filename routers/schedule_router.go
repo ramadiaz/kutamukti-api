@@ -11,6 +11,6 @@ func ScheduleRoutes(r *gin.RouterGroup, scheduleController controllers.CompContr
 	scheduleGroup := r.Group("/schedule")
 	{
 		scheduleGroup.POST("/create", middleware.StaffMiddleware(), scheduleController.Create)
-		scheduleGroup.GET("/getall", scheduleController.FindAll)
+		scheduleGroup.GET("/getall", middleware.OptionalAuthMiddleware(), scheduleController.FindAll)
 	}
 }

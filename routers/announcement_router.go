@@ -11,5 +11,6 @@ func AnnouncementRoutes(r *gin.RouterGroup, announcementController controllers.C
 	announcementGroup := r.Group("/announcement")
 	{
 		announcementGroup.POST("/create", middleware.StaffMiddleware(), announcementController.Create)
+		announcementGroup.GET("/getall", middleware.OptionalAuthMiddleware(), announcementController.FindAll)
 	}
 }

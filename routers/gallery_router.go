@@ -12,13 +12,13 @@ func GalleryRoutes(r *gin.RouterGroup, galleryController controllers.CompControl
 	imageGroup := galleryGroup.Group("/image")
 	{
 		imageGroup.POST("/create", middleware.StaffMiddleware(), galleryController.Create)
-		imageGroup.GET("/getall", galleryController.FindAll)
+		imageGroup.GET("/getall", middleware.OptionalAuthMiddleware(), galleryController.FindAll)
 		imageGroup.DELETE("/:uuid", middleware.StaffMiddleware(), galleryController.Delete)
 	}
 	videoGroup := galleryGroup.Group("/video")
 	{
 		videoGroup.POST("/create", middleware.StaffMiddleware(), galleryController.CreateVideo)
 		videoGroup.GET("/:uuid", galleryController.FindVideoByUUID)
-		videoGroup.GET("/getall", galleryController.FindAllVideo)
+		videoGroup.GET("/getall", middleware.OptionalAuthMiddleware(), galleryController.FindAllVideo)
 	}
 }
