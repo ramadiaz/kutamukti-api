@@ -2,6 +2,7 @@ package routers
 
 import (
 	"kutamukti-api/injectors"
+	"kutamukti-api/pkg/middleware"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -37,5 +38,5 @@ func CompRouters(r *gin.RouterGroup, db *gorm.DB, validate *validator.Validate, 
 	StorageRoutes(r, storageController)
 	NewsRoutes(r, newsController)
 
-	r.GET("/analytics", analyticsController.GetAnalyticsData)
+	r.GET("/analytics", middleware.StaffMiddleware(), analyticsController.GetAnalyticsData)
 }
