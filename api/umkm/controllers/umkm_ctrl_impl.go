@@ -8,6 +8,8 @@ import (
 	"sync"
 	"time"
 
+	"kutamukti-api/pkg/helpers"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -58,6 +60,24 @@ func (h *CompControllersImpl) Create(ctx *gin.Context) {
 }
 
 func (h *CompControllersImpl) FindAll(ctx *gin.Context) {
+	user, _ := helpers.GetUserData(ctx)
+	if user.Role == "admin" || user.Role == "staff" {
+		data, err := h.services.FindAll(ctx)
+		if err != nil {
+			ctx.JSON(err.Status, err)
+			return
+		}
+		umkmFindAllCache.Lock()
+		umkmFindAllCache.data = data
+		umkmFindAllCache.time = time.Now()
+		umkmFindAllCache.Unlock()
+		ctx.JSON(http.StatusOK, dto.Response{
+			Status:  http.StatusOK,
+			Message: "success (recached)",
+			Body:    data,
+		})
+		return
+	}
 	umkmFindAllCache.Lock()
 	if umkmFindAllCache.data != nil && time.Since(umkmFindAllCache.time) < umkmFindAllCacheDuration {
 		data := umkmFindAllCache.data
@@ -70,18 +90,15 @@ func (h *CompControllersImpl) FindAll(ctx *gin.Context) {
 		return
 	}
 	umkmFindAllCache.Unlock()
-
 	data, err := h.services.FindAll(ctx)
 	if err != nil {
 		ctx.JSON(err.Status, err)
 		return
 	}
-
 	umkmFindAllCache.Lock()
 	umkmFindAllCache.data = data
 	umkmFindAllCache.time = time.Now()
 	umkmFindAllCache.Unlock()
-
 	ctx.JSON(http.StatusOK, dto.Response{
 		Status:  http.StatusOK,
 		Message: "success",
@@ -129,6 +146,24 @@ func (h *CompControllersImpl) CreateProduct(ctx *gin.Context) {
 }
 
 func (h *CompControllersImpl) FindAllProduct(ctx *gin.Context) {
+	user, _ := helpers.GetUserData(ctx)
+	if user.Role == "admin" || user.Role == "staff" {
+		data, err := h.services.FindAllProduct(ctx)
+		if err != nil {
+			ctx.JSON(err.Status, err)
+			return
+		}
+		umkmFindAllProductCache.Lock()
+		umkmFindAllProductCache.data = data
+		umkmFindAllProductCache.time = time.Now()
+		umkmFindAllProductCache.Unlock()
+		ctx.JSON(http.StatusOK, dto.Response{
+			Status:  http.StatusOK,
+			Message: "success (recached)",
+			Body:    data,
+		})
+		return
+	}
 	umkmFindAllProductCache.Lock()
 	if umkmFindAllProductCache.data != nil && time.Since(umkmFindAllProductCache.time) < umkmFindAllProductCacheDuration {
 		data := umkmFindAllProductCache.data
@@ -141,18 +176,15 @@ func (h *CompControllersImpl) FindAllProduct(ctx *gin.Context) {
 		return
 	}
 	umkmFindAllProductCache.Unlock()
-
 	data, err := h.services.FindAllProduct(ctx)
 	if err != nil {
 		ctx.JSON(err.Status, err)
 		return
 	}
-
 	umkmFindAllProductCache.Lock()
 	umkmFindAllProductCache.data = data
 	umkmFindAllProductCache.time = time.Now()
 	umkmFindAllProductCache.Unlock()
-
 	ctx.JSON(http.StatusOK, dto.Response{
 		Status:  http.StatusOK,
 		Message: "success",

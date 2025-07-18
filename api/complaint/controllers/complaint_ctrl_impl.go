@@ -59,6 +59,24 @@ func (h *CompControllersImpl) Create(ctx *gin.Context) {
 }
 
 func (h *CompControllersImpl) FindAll(ctx *gin.Context) {
+	user, _ := helpers.GetUserData(ctx)
+	if user.Role == "admin" || user.Role == "staff" {
+		output, err := h.services.FindAll(ctx)
+		if err != nil {
+			ctx.JSON(err.Status, err)
+			return
+		}
+		complaintFindAllCache.Lock()
+		complaintFindAllCache.data = output
+		complaintFindAllCache.time = time.Now()
+		complaintFindAllCache.Unlock()
+		ctx.JSON(http.StatusOK, dto.Response{
+			Status:  http.StatusOK,
+			Message: "success (recached)",
+			Body:    output,
+		})
+		return
+	}
 	complaintFindAllCache.Lock()
 	if complaintFindAllCache.data != nil && time.Since(complaintFindAllCache.time) < complaintFindAllCacheDuration {
 		data := complaintFindAllCache.data
@@ -71,18 +89,15 @@ func (h *CompControllersImpl) FindAll(ctx *gin.Context) {
 		return
 	}
 	complaintFindAllCache.Unlock()
-
 	output, err := h.services.FindAll(ctx)
 	if err != nil {
 		ctx.JSON(err.Status, err)
 		return
 	}
-
 	complaintFindAllCache.Lock()
 	complaintFindAllCache.data = output
 	complaintFindAllCache.time = time.Now()
 	complaintFindAllCache.Unlock()
-
 	ctx.JSON(http.StatusOK, dto.Response{
 		Status:  http.StatusOK,
 		Message: "success",

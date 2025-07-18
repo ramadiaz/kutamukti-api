@@ -8,6 +8,8 @@ import (
 	"sync"
 	"time"
 
+	"kutamukti-api/pkg/helpers"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -51,6 +53,24 @@ func (h *CompControllersImpl) Create(ctx *gin.Context) {
 }
 
 func (h *CompControllersImpl) FindAll(ctx *gin.Context) {
+	user, _ := helpers.GetUserData(ctx)
+	if user.Role == "admin" || user.Role == "staff" {
+		data, err := h.services.FindAll(ctx)
+		if err != nil {
+			ctx.JSON(err.Status, err)
+			return
+		}
+		announcementFindAllCache.Lock()
+		announcementFindAllCache.data = data
+		announcementFindAllCache.time = time.Now()
+		announcementFindAllCache.Unlock()
+		ctx.JSON(http.StatusOK, dto.Response{
+			Status:  http.StatusOK,
+			Message: "success (recached)",
+			Body:    data,
+		})
+		return
+	}
 	announcementFindAllCache.Lock()
 	if announcementFindAllCache.data != nil && time.Since(announcementFindAllCache.time) < announcementFindAllCacheDuration {
 		data := announcementFindAllCache.data
@@ -63,18 +83,15 @@ func (h *CompControllersImpl) FindAll(ctx *gin.Context) {
 		return
 	}
 	announcementFindAllCache.Unlock()
-
 	data, err := h.services.FindAll(ctx)
 	if err != nil {
 		ctx.JSON(err.Status, err)
 		return
 	}
-
 	announcementFindAllCache.Lock()
 	announcementFindAllCache.data = data
 	announcementFindAllCache.time = time.Now()
 	announcementFindAllCache.Unlock()
-
 	ctx.JSON(http.StatusOK, dto.Response{
 		Status:  http.StatusOK,
 		Message: "success",
