@@ -27,7 +27,7 @@ func (r *CompRepositoriesImpl) Create(ctx *gin.Context, tx *gorm.DB, data models
 func (r *CompRepositoriesImpl) FindAll(ctx *gin.Context, tx *gorm.DB) ([]models.Schedules, *exceptions.Exception) {
 	var output []models.Schedules
 
-	result := tx.Find(&output)
+	result := tx.Order("created_at DESC").Find(&output)
 	if result.Error != nil {
 		return nil, exceptions.ParseGormError(tx, result.Error)
 	}
