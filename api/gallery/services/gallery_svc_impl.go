@@ -115,3 +115,7 @@ func (s *CompServicesImpl) FindVideoByUUID(ctx *gin.Context, uuid string) (*dto.
 
 	return &response, nil
 }
+
+func (s *CompServicesImpl) DeleteVideo(ctx *gin.Context, uuid string) *exceptions.Exception {
+	return s.repo.DeleteVideo(ctx, s.DB, uuid)
+}

@@ -20,5 +20,6 @@ func GalleryRoutes(r *gin.RouterGroup, galleryController controllers.CompControl
 		videoGroup.POST("/create", middleware.StaffMiddleware(), galleryController.CreateVideo)
 		videoGroup.GET("/:uuid", galleryController.FindVideoByUUID)
 		videoGroup.GET("/getall", middleware.OptionalAuthMiddleware(), galleryController.FindAllVideo)
+		videoGroup.DELETE("/:uuid", middleware.StaffMiddleware(), galleryController.DeleteVideo)
 	}
 }

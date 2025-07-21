@@ -86,3 +86,11 @@ func (r *CompRepositoriesImpl) FindVideoByUUID(ctx *gin.Context, tx *gorm.DB, uu
 
 	return &output, nil
 }
+
+func (r *CompRepositoriesImpl) DeleteVideo(ctx *gin.Context, tx *gorm.DB, uuid string) *exceptions.Exception {
+	result := tx.Where("uuid = ?", uuid).Delete(&models.Videos{})
+	if result.Error != nil {
+		return exceptions.ParseGormError(tx, result.Error)
+	}
+	return nil
+}

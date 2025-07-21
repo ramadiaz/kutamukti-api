@@ -14,6 +14,7 @@ type CompRepositories interface {
 	Update(ctx *gin.Context, tx *gorm.DB, data models.ImageGalleries) *exceptions.Exception
 	Delete(ctx *gin.Context, tx *gorm.DB, uuid string) *exceptions.Exception
 	CreateVideo(ctx *gin.Context, tx *gorm.DB, data models.Videos) *exceptions.Exception
-	FindAllVideo(ctx *gin.Context, tx *gorm.DB) ([]models.Videos, *exceptions.Exception) 
+	FindAllVideo(ctx *gin.Context, tx *gorm.DB) ([]models.Videos, *exceptions.Exception)
 	FindVideoByUUID(ctx *gin.Context, tx *gorm.DB, uuid string) (*models.Videos, *exceptions.Exception)
+	DeleteVideo(ctx *gin.Context, tx *gorm.DB, uuid string) *exceptions.Exception
 }

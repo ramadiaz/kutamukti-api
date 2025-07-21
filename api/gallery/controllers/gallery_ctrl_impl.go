@@ -209,3 +209,21 @@ func (h *CompControllersImpl) FindVideoByUUID(ctx *gin.Context) {
 		Body:    data,
 	})
 }
+
+func (h *CompControllersImpl) DeleteVideo(ctx *gin.Context) {
+	uuid := ctx.Param("uuid")
+	if uuid == "" {
+		ctx.JSON(http.StatusBadRequest, exceptions.NewException(http.StatusBadRequest, exceptions.ErrBadRequest))
+		return
+	}
+
+	err := h.services.DeleteVideo(ctx, uuid)
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, dto.Response{
+		Status:  http.StatusOK,
+		Message: "success",
+	})
+}
